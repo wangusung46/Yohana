@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0980750000000004"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="fakturdano" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+     jualbarang.`faktur` AS jualbarang_faktur,
+     jualbarang.`kodepalanggan` AS jualbarang_kodepalanggan,
+     jualbarang.`namapelanggan` AS jualbarang_namapelanggan,
+     jualbarang.`alamat` AS jualbarang_alamat,
+     jualbarang.`janiskelamin` AS jualbarang_janiskelamin,
+     jualbarang.`nomortelepon` AS jualbarang_nomortelepon,
+     jualbarang.`kodebarang` AS jualbarang_kodebarang,
+     jualbarang.`namabarang` AS jualbarang_namabarang,
+     jualbarang.`namasatuan` AS jualbarang_namasatuan,
+     jualbarang.`hargajual` AS jualbarang_hargajual,
+     jualbarang.`jumlahjual` AS jualbarang_jumlahjual,
+     jualbarang.`hargajualtotal` AS jualbarang_hargajualtotal,
+     jualbarang.`bayar` AS jualbarang_bayar,
+     jualbarang.`kembali` AS jualbarang_kembali,
+     jualbarang.`untung` AS jualbarang_untung,
+     jualbarang.`tanggal` AS jualbarang_tanggal,
+     login.`username` AS login_username,
+     login.`password` AS login_password,
+     login.`jenis_kelamin` AS login_jenis_kelamin,
+     login.`email` AS login_email,
+     login.`no_telp` AS login_no_telp,
+     login.`alamat` AS login_alamat
+FROM
+     `jualbarang` jualbarang,
+     `login` login
+WHERE
+     jualbarang.`faktur` LIKE $P{fakturdano}]]>
+	</queryString>
+	<field name="jualbarang_faktur" class="java.lang.String"/>
+	<field name="jualbarang_kodepalanggan" class="java.lang.String"/>
+	<field name="jualbarang_namapelanggan" class="java.lang.String"/>
+	<field name="jualbarang_alamat" class="java.lang.String"/>
+	<field name="jualbarang_janiskelamin" class="java.lang.String"/>
+	<field name="jualbarang_nomortelepon" class="java.lang.String"/>
+	<field name="jualbarang_kodebarang" class="java.lang.String"/>
+	<field name="jualbarang_namabarang" class="java.lang.String"/>
+	<field name="jualbarang_namasatuan" class="java.lang.String"/>
+	<field name="jualbarang_hargajual" class="java.lang.Integer"/>
+	<field name="jualbarang_jumlahjual" class="java.lang.Integer"/>
+	<field name="jualbarang_hargajualtotal" class="java.lang.Integer"/>
+	<field name="jualbarang_bayar" class="java.lang.Integer"/>
+	<field name="jualbarang_kembali" class="java.lang.Integer"/>
+	<field name="jualbarang_untung" class="java.lang.Integer"/>
+	<field name="jualbarang_tanggal" class="java.sql.Date"/>
+	<field name="login_username" class="java.lang.String"/>
+	<field name="login_password" class="java.lang.String"/>
+	<field name="login_jenis_kelamin" class="java.lang.String"/>
+	<field name="login_email" class="java.lang.String"/>
+	<field name="login_no_telp" class="java.lang.Integer"/>
+	<field name="login_alamat" class="java.lang.String"/>
+	<variable name="jualbarang_hargajualtotal_1" class="java.lang.Integer" calculation="First">
+		<variableExpression><![CDATA[$F{jualbarang_hargajualtotal}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="802" height="39"/>
+				<textElement textAlignment="Center">
+					<font size="24"/>
+				</textElement>
+				<text><![CDATA[PT CATUR SENTOSA ANUGERAH]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="217" y="39" width="369" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{login_email}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="217" y="59" width="369" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{login_no_telp}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="586" y="59" width="196" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="0" y="0" width="187" height="79"/>
+				<imageExpression><![CDATA["E:\\Dano\\catur.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="802" height="35" backcolor="#CCCCCC"/>
+			</rectangle>
+			<textField>
+				<reportElement x="0" y="0" width="802" height="35"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jualbarang_faktur}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="21" splitType="Stretch">
+			<rectangle>
+				<reportElement x="36" y="1" width="164" height="20" backcolor="#CCCCCC"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="1" width="36" height="20" backcolor="#CCCCCC"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="200" y="1" width="350" height="20" backcolor="#CCCCCC"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="627" y="1" width="175" height="20" backcolor="#CCCCCC"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="550" y="1" width="77" height="20" backcolor="#CCCCCC"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="36" y="1" width="164" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[NAMA BARANG]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1" width="36" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[NO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="1" width="323" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[HARGA SATUAN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="550" y="1" width="77" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[SATUAN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="627" y="1" width="155" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[TOTAL HARGA]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<rectangle>
+				<reportElement x="36" y="0" width="164" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="0" width="36" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="200" y="0" width="350" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="627" y="0" width="175" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="550" y="0" width="77" height="20"/>
+			</rectangle>
+			<textField>
+				<reportElement x="0" y="0" width="36" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{COLUMN_COUNT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="36" y="0" width="164" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{jualbarang_namabarang}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="550" y="0" width="77" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{jualbarang_namasatuan}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="627" y="0" width="155" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{jualbarang_hargajualtotal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="200" y="0" width="323" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{jualbarang_hargajual}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="21" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="89" splitType="Stretch">
+			<rectangle>
+				<reportElement x="450" y="0" width="100" height="20" backcolor="#CCCCCC"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="550" y="0" width="252" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="450" y="20" width="100" height="20" backcolor="#CCCCCC"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="450" y="40" width="100" height="20" backcolor="#CCCCCC"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="550" y="20" width="252" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="550" y="40" width="252" height="20"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="523" y="0" width="27" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="523" y="20" width="27" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="523" y="40" width="27" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="450" y="20" width="73" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[GRAND HARGA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="450" y="0" width="73" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[PEMBAYARAN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="450" y="40" width="73" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[KEMBALIAN]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="550" y="20" width="232" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{jualbarang_hargajualtotal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="550" y="0" width="232" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{jualbarang_bayar}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="550" y="40" width="232" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{jualbarang_kembali}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>
