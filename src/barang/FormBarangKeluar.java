@@ -172,13 +172,19 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
                 String Nol = "";
 
                 if (AN.length() == 1) {
-                    Nol = "0";
+                    Nol = "0000";
                 } else if (AN.length() == 2) {
+                    Nol = "000";
+                } else if (AN.length() == 3) {
+                    Nol = "00";
+                } else if (AN.length() == 4) {
+                    Nol = "0";
+                } else if (AN.length() == 5) {
                     Nol = "";
                 }
-                awal = "8" + Nol + AN;
+                awal = "H" + Nol + AN;
             } else {
-                awal = "801";
+                awal = "H00001";
             }
         } catch (NumberFormatException | SQLException e) {
             JOptionPane.showMessageDialog(null, e);
@@ -186,7 +192,7 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
         String rpelanggan = cnpelanggan.getSelectedItem().toString().substring(0, 6);
         String rbeli = cnbarang.getSelectedItem().toString().substring(0, 6);
         String rsatuan = textnsatuan.getText().substring(0, 6);
-        textfaktur.setText(rpelanggan + rbeli + rsatuan + awal);
+        textfaktur.setText(awal);
     }
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

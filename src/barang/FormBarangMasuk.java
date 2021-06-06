@@ -21,7 +21,6 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
         model = new DefaultTableModel();
         tableinput.setModel(model);
         model.addColumn("Kode Beli");
-        model.addColumn("Kode Stock");
         model.addColumn("Nama Supplier");
         model.addColumn("Kategori Barang");
         model.addColumn("Nama Barang");
@@ -150,7 +149,7 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
             ResultSet rs = st.executeQuery(sql);
 
             if (rs.next()) {
-                String kbar = rs.getString("kodebeli").substring(28);
+                String kbar = rs.getString("kodebeli").substring(1);
                 System.out.println(kbar);
                 String AN = "" + (Integer.parseInt(kbar) + 1);
                 String Nol = "";
@@ -172,7 +171,7 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
                 String rbarang = barang;
                 String rsatuan = satuan;
                 try {
-                    textkbeli.setText(rsupplier + rkategori + rbarang + rsatuan + kbar);
+                    textkbeli.setText(kbar);
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(null, e);
                 }
@@ -183,7 +182,7 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
                 String rbarang = barang;
                 String rsatuan = satuan;
                 try {
-                    textkbeli.setText(rsupplier + rkategori + rbarang + rsatuan + kbar);
+                    textkbeli.setText(kbar);
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(null, e);
                 }

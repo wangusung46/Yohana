@@ -76,6 +76,7 @@ public class FormSatuan extends javax.swing.JInternalFrame {
                     Nol = "";
                 }
                 textksatuan.setText("B" + Nol + AN);
+                System.out.println("B" + Nol + AN);
             } else {
                 textksatuan.setText("B00001");
             }
