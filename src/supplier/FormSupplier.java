@@ -370,6 +370,8 @@ public class FormSupplier extends javax.swing.JInternalFrame {
                 pst.setString(4, ttelepon);
                 pst.setString(5, trekening);
                 pst.setString(6, tbank);
+                pst.setString(7, temail);
+                pst.setString(8, ttanggal);
   
                 pst.executeUpdate();
                 pst.close();
@@ -454,6 +456,7 @@ public class FormSupplier extends javax.swing.JInternalFrame {
                 return;
             }
             try {
+                String ttanggal = date.toString();
                 conn = Koneksi.getKoneksi();
                 sql = "UPDATE supplier SET namasupplier=?, alamat=?, nomortelepon=?, norekening=?, bank=?, email=? where kodesupplier='" + textksupplier.getText() + "'";
                 pst = conn.prepareStatement(sql);
@@ -463,6 +466,7 @@ public class FormSupplier extends javax.swing.JInternalFrame {
                 pst.setString(4, textrekening.getText());
                 pst.setString(5, textbank.getText());
                 pst.setString(6, textemail.getText());
+                pst.setString(7, ttanggal);
                 pst.executeUpdate();
                 JOptionPane.showMessageDialog(null, "DATA BERHASIL DIEDIT", "PT MULIA JAYA TEXTILE", JOptionPane.INFORMATION_MESSAGE);
                 textksupplier.requestFocus();
