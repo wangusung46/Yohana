@@ -57,7 +57,7 @@ public class FormKategori extends javax.swing.JInternalFrame {
             conn = Koneksi.getKoneksi();
             st = conn.createStatement();
 
-            sql = "SELECT * FROM kategori ORDER by kodekategori DESC";
+            sql = "SELECT * FROM kategori";
             rs = st.executeQuery(sql);
 
             if (rs.next()) {
