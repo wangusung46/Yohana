@@ -20,8 +20,8 @@ import net.sf.jasperreports.view.JasperViewer;
 
 public class FormBarangKeluar extends javax.swing.JInternalFrame {
 
-    private final DefaultTableModel model;
-    private Connection conn = Koneksi.getKoneksi();
+    private final DefaultTableModel defaultTableModel;
+    private Connection connection = Koneksi.getKoneksi();
     private int bay, bel, jum, hj, jj, kem, unt, tot, totbel;
     private String awal;
 
@@ -33,17 +33,18 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
         textkembali.setEnabled(false);
         textuntung.setEnabled(false);
         texttbarang.setEnabled(false);
-        model = new DefaultTableModel();
-        tableinput.setModel(model);
-        model.addColumn("Faktur");
-        model.addColumn("Nama Pelanggan");
-        model.addColumn("Nama Barang");
-        model.addColumn("Satuan Barang");
-        model.addColumn("Harga Jual");
-        model.addColumn("Jumlah Jual");
-        model.addColumn("Harga Jual Total");
-        model.addColumn("Untung");
-        model.addColumn("Tanggal");
+        defaultTableModel = new DefaultTableModel();
+        tableinput.setModel(defaultTableModel);
+        defaultTableModel.addColumn("Faktur");
+        defaultTableModel.addColumn("Nama Pelanggan");
+        defaultTableModel.addColumn("Nama Barang");
+        defaultTableModel.addColumn("Satuan Barang");
+        defaultTableModel.addColumn("Harga Jual");
+        defaultTableModel.addColumn("Jumlah Jual");
+        defaultTableModel.addColumn("Harga Jual Total");
+        defaultTableModel.addColumn("Untung");
+        defaultTableModel.addColumn("Kembalian");
+        defaultTableModel.addColumn("Tanggal");
         loadData();
         tampilKodePelanggan();
         tampilCetak();
@@ -59,24 +60,38 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
     private void loadData() {
         try {
             bsimpan.setEnabled(true);
-            model.getDataVector().removeAllElements();
-            model.fireTableDataChanged();
+            defaultTableModel.getDataVector().removeAllElements();
+            defaultTableModel.fireTableDataChanged();
             String sql = "SELECT * FROM jualbarang";
-            Statement st = conn.createStatement();
-            try (ResultSet rs = st.executeQuery(sql)) {
-                while (rs.next()) {
-                    Object[] o = new Object[9];
-                    o[0] = rs.getString("faktur");
-                    o[1] = rs.getString("kodepelanggan");
-                    o[2] = rs.getString("kodebarang");
-                    o[3] = rs.getString("kodesatuan");
-                    o[4] = rs.getString("hargajual");
-                    o[5] = rs.getString("jumlahjual");
-                    o[6] = rs.getString("hargajualtotal");
-                    o[7] = rs.getString("untung");
-                    o[8] = rs.getString("tanggal");
-                    model.addRow(o);
-                }
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            
+            Statement statementRelation = connection.createStatement();
+            ResultSet resultSetRelation;
+            
+            while (resultSet.next()) {
+                Object[] objects = new Object[10];
+                objects[0] = resultSet.getString("faktur");
+                
+                resultSetRelation = statementRelation.executeQuery("SELECT namapelanggan FROM pelanggan WHERE kodepelanggan = '" + resultSet.getString("kodepelanggan") + "'");
+                resultSetRelation.next();
+                objects[1] = resultSetRelation.getString("namapelanggan");
+                
+                resultSetRelation = statementRelation.executeQuery("SELECT namabarang FROM barang WHERE kodebarang = '" + resultSet.getString("kodebarang") + "'");
+                resultSetRelation.next();
+                objects[2] = resultSetRelation.getString("namabarang");
+
+                resultSetRelation = statementRelation.executeQuery("SELECT namasatuan FROM satuan WHERE kodesatuan = '" + resultSet.getString("kodesatuan") + "'");
+                resultSetRelation.next();
+                objects[3] = resultSetRelation.getString("namasatuan");
+                
+                objects[4] = resultSet.getString("hargajual");
+                objects[5] = resultSet.getString("jumlahjual");
+                objects[6] = resultSet.getString("hargajualtotal");
+                objects[7] = resultSet.getString("untung");
+                objects[8] = resultSet.getString("kembali");
+                objects[9] = resultSet.getString("tanggal");
+                defaultTableModel.addRow(objects);
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Data Gagal Diload " + e);
@@ -86,10 +101,10 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
     private void tampilCetak() {
         try {
             String sql = "SELECT * FROM jualbarang";
-            Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery(sql);
-            while (rs.next()) {
-                ccetak.addItem(rs.getString("faktur"));
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                ccetak.addItem(resultSet.getString("faktur"));
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e);
@@ -99,10 +114,10 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
     private void tampilKodePelanggan() {
         try {
             String sql = "SELECT * FROM pelanggan";
-            Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery(sql);
-            while (rs.next()) {
-                cnpelanggan.addItem(rs.getString("kodepelanggan") + " " + rs.getString("namapelanggan"));
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                cnpelanggan.addItem(resultSet.getString("kodepelanggan") + " " + resultSet.getString("namapelanggan"));
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e);
@@ -114,8 +129,8 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
             String sql1, sql2;
             sql1 = "SELECT * FROM belibarang GROUP BY kodebarang";
 
-            Statement st1 = conn.createStatement();
-            Statement st2 = conn.createStatement();
+            Statement st1 = connection.createStatement();
+            Statement st2 = connection.createStatement();
             ResultSet rs1, rs2;
             rs1 = st1.executeQuery(sql1);
             int i = 0;
@@ -139,7 +154,7 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
                     + cnbarang.getSelectedItem().toString().substring(0, 6)
                     + "' GROUP BY kodebarang";
             System.out.println(sql1);
-            Statement st1 = conn.createStatement();
+            Statement st1 = connection.createStatement();
             ResultSet rs1;
             rs1 = st1.executeQuery(sql1);
             rs1.absolute(i);
@@ -147,7 +162,7 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
             String sql2 = "SELECT * FROM satuan WHERE kodesatuan = '"
                     + rs1.getString("kodesatuan") + "'";
             System.out.println(sql2);
-            Statement st2 = conn.createStatement();
+            Statement st2 = connection.createStatement();
             ResultSet rs2;
             rs2 = st2.executeQuery(sql2);
             rs2.absolute(i);
@@ -161,12 +176,12 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
 
     private void kodeJual() {
         try {
-            conn = Koneksi.getKoneksi();
-            Statement st = conn.createStatement();
+            connection = Koneksi.getKoneksi();
+            Statement statement = connection.createStatement();
             String sql = "SELECT * FROM jualbarang ORDER BY faktur DESC";
-            ResultSet rs = st.executeQuery(sql);
-            if (rs.next()) {
-                String kbar = rs.getString("faktur").substring(1);
+            ResultSet resultSet = statement.executeQuery(sql);
+            if (resultSet.next()) {
+                String kbar = resultSet.getString("faktur").substring(1);
                 System.out.println(kbar);
                 String AN = "" + (Integer.parseInt(kbar) + 1);
                 String Nol = "";
@@ -243,6 +258,8 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
         textkembali = new javax.swing.JTextField();
         panelTombol = new javax.swing.JPanel();
         bsimpan = new javax.swing.JButton();
+        bhapus = new javax.swing.JButton();
+        bedit = new javax.swing.JButton();
         panelCetak = new javax.swing.JPanel();
         ccetak = new javax.swing.JComboBox<>();
         bcetak = new javax.swing.JButton();
@@ -440,6 +457,24 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
         });
         panelTombol.add(bsimpan);
 
+        bhapus.setText("HAPUS");
+        bhapus.setPreferredSize(new java.awt.Dimension(50, 24));
+        bhapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bhapusActionPerformed(evt);
+            }
+        });
+        panelTombol.add(bhapus);
+
+        bedit.setText("EDIT");
+        bedit.setPreferredSize(new java.awt.Dimension(50, 24));
+        bedit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                beditActionPerformed(evt);
+            }
+        });
+        panelTombol.add(bedit);
+
         panelCetak.setLayout(new java.awt.GridLayout(1, 0));
 
         panelCetak.add(ccetak);
@@ -482,6 +517,11 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tableinput.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableinputMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tableinput);
 
         panelTabel.add(jScrollPane1);
@@ -534,7 +574,12 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
     private void bsimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bsimpanActionPerformed
         if (texthjual.getText().equals("")
                 || textjjual.getText().equals("")
-                || textbayar.getText().equals("")) {
+                || textbayar.getText().equals("")
+                || texttbarang.getText().equals("")
+                || textbayar.getText().equals("")
+                || textuntung.getText().equals("")
+                || textkembali.getText().equals("")
+                ){
             JOptionPane.showMessageDialog(null, "LENGKAPI DATA !", "PT MULIA JAYA TEXTILE", JOptionPane.INFORMATION_MESSAGE);
         } else {
             String tfaktur = textfaktur.getText();
@@ -551,9 +596,8 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
             java.sql.Date date = new java.sql.Date(millis);
             System.out.println(date);
             String ttanggal = date.toString();
-            Connection c = Koneksi.getKoneksi();
             String sql = "INSERT INTO jualbarang VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            try (PreparedStatement pst = c.prepareStatement(sql)) {
+            try (PreparedStatement pst = connection.prepareStatement(sql)) {
                 pst.setString(1, tfaktur);
                 pst.setString(2, tkpelanggan);
                 pst.setString(3, tkbarang);
@@ -577,10 +621,10 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
 
     private void textcariKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textcariKeyReleased
         try {
-            model.getDataVector().removeAllElements();
-            model.fireTableDataChanged();
-            conn = Koneksi.getKoneksi();
-            Statement st = conn.createStatement();
+            defaultTableModel.getDataVector().removeAllElements();
+            defaultTableModel.fireTableDataChanged();
+            connection = Koneksi.getKoneksi();
+            Statement statement = connection.createStatement();
             String sql = "SELECT * FROM jualbarang WHERE "
                     + "faktur LIKE '%" + textcari.getText()
                     + "%' OR kodepelanggan LIKE'%" + textcari.getText()
@@ -591,19 +635,19 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
                     + "%' OR hargatotal LIKE'%" + textcari.getText()
                     + "%' OR untung LIKE'%" + textcari.getText()
                     + "%' OR tanggal LIKE'%" + textcari.getText() + "%'";
-            ResultSet rs = st.executeQuery(sql);
-            while (rs.next()) {
-                Object[] o = new Object[9];
-                o[0] = rs.getString("faktur");
-                o[1] = rs.getString("namapelanggan");
-                o[2] = rs.getString("namabarang");
-                o[3] = rs.getString("namasatuan");
-                o[4] = rs.getString("hargajual");
-                o[5] = rs.getString("jumlahjual");
-                o[6] = rs.getString("hargajualtotal");
-                o[7] = rs.getString("untung");
-                o[8] = rs.getString("tanggal");
-                model.addRow(o);
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                Object[] objects = new Object[9];
+                objects[0] = resultSet.getString("faktur");
+                objects[1] = resultSet.getString("namapelanggan");
+                objects[2] = resultSet.getString("namabarang");
+                objects[3] = resultSet.getString("namasatuan");
+                objects[4] = resultSet.getString("hargajual");
+                objects[5] = resultSet.getString("jumlahjual");
+                objects[6] = resultSet.getString("hargajualtotal");
+                objects[7] = resultSet.getString("untung");
+                objects[8] = resultSet.getString("tanggal");
+                defaultTableModel.addRow(objects);
             }
         } catch (SQLException ex) {
             Logger.getLogger(FormBarangKeluar.class.getName()).log(Level.SEVERE, null, ex);
@@ -622,7 +666,7 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
         kem = bay - tot;
         if (kem < 0) {
             JOptionPane.showMessageDialog(null, "Pembayaran tidak mencukupi total penjualan");
-            JOptionPane.showMessageDialog(null, "Kurang Rp."+(Integer.parseInt((texttbarang.getText())) - Integer.parseInt(textbayar.getText())));
+            JOptionPane.showMessageDialog(null, "Kurang Rp." + (Integer.parseInt((texttbarang.getText())) - Integer.parseInt(textbayar.getText())));
         } else {
             totbel = bel * jj;
             unt = tot - totbel;
@@ -642,7 +686,7 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
         jj = Integer.parseInt(textjjual.getText());
         if (Integer.parseInt(texthbeli.getText()) > Integer.parseInt(texthjual.getText())) {
             JOptionPane.showMessageDialog(null, "Harga pengeluaran barang lebih kecil dari pemasukan");
-            
+
         } else {
             jum = hj * jj;
             String jumlahLocal = String.valueOf(jum);
@@ -684,6 +728,44 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
     private void textjjualKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textjjualKeyTyped
         FilterAngka(evt);
     }//GEN-LAST:event_textjjualKeyTyped
+
+    private void tableinputMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableinputMouseClicked
+        bsimpan.setEnabled(false);
+        bedit.setEnabled(true);
+        bhapus.setEnabled(true);
+
+        int i = tableinput.getSelectedRow();
+        if (i == -1) {
+            return;
+        }
+
+        String tableFaktur = (String) defaultTableModel.getValueAt(i, 0);
+        textfaktur.setText(tableFaktur);
+
+        String tablePelanggan = (String) defaultTableModel.getValueAt(i, 1);
+        cnpelanggan.setSelectedItem(tablePelanggan);
+
+        String tableBarang = (String) defaultTableModel.getValueAt(i, 2);
+        cnbarang.setSelectedItem(tableBarang);
+
+        String tableSatuan = (String) defaultTableModel.getValueAt(i, 3);
+        textnsatuan.setText(tableSatuan);
+
+        String tableHargaJual = (String) defaultTableModel.getValueAt(i, 4);
+        texthjual.setText(tableHargaJual);
+        
+        String tableJumlahJual = (String) defaultTableModel.getValueAt(i, 5);
+        textjjual.setText(tableJumlahJual);
+        
+    }//GEN-LAST:event_tableinputMouseClicked
+
+    private void bhapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bhapusActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_bhapusActionPerformed
+
+    private void beditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_beditActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_beditActionPerformed
     public static void main(String args[]) {
 
         java.awt.EventQueue.invokeLater(() -> {
@@ -693,6 +775,8 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bcetak;
+    private javax.swing.JButton bedit;
+    private javax.swing.JButton bhapus;
     private javax.swing.JButton bsimpan;
     private javax.swing.JButton btotal;
     private javax.swing.JComboBox<String> ccetak;
@@ -755,16 +839,17 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
         String rsatuan = ("%" + textnsatuan.getText().substring(0, 6) + "%");
 //        String reportSource;
         try {
-//            com.mysql.jdbc.Connection c = (com.mysql.jdbc.Connection) conn;
+//            com.mysql.jdbc.Connection c = (com.mysql.jdbc.Connection) connection;
 //            reportSource = "src/report/report1.jrxml";
             HashMap parameter = new HashMap();
             parameter.put("fakturdano", rcetak);
             parameter.put("fakturkodebarang", rbarang);
             parameter.put("fakturkodesatuan", rsatuan);
+            System.out.println(rcetak + " " + rbarang + " " + rsatuan);
             InputStream file = getClass().getResourceAsStream("/report/report1.jrxml");
             JasperDesign JasperDesign = JRXmlLoader.load(file);
             JasperReport JasperReport = JasperCompileManager.compileReport(JasperDesign);
-            JasperPrint JasperPrint = JasperFillManager.fillReport(JasperReport, parameter, conn);
+            JasperPrint JasperPrint = JasperFillManager.fillReport(JasperReport, parameter, connection);
             JasperViewer.viewReport(JasperPrint, false);
         } catch (JRException e) {
             System.out.println(e);

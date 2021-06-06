@@ -9,8 +9,8 @@ import javax.swing.table.DefaultTableModel;
 
 public class FormBarangMasuk extends javax.swing.JInternalFrame {
 
-    private final DefaultTableModel model;
-    private Connection conn = Koneksi.getKoneksi();
+    private final DefaultTableModel defaultTableModel;
+    private Connection connection = Koneksi.getKoneksi();
     private double tot, hb, jum;
     private String stock, kategori, satuan, supplier, barang;
 
@@ -18,17 +18,17 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
         initComponents();
         textkbeli.setEnabled(false);
         texttotal.setEnabled(false);
-        model = new DefaultTableModel();
-        tableinput.setModel(model);
-        model.addColumn("Kode Beli");
-        model.addColumn("Nama Supplier");
-        model.addColumn("Kategori Barang");
-        model.addColumn("Nama Barang");
-        model.addColumn("Satuan Barang");
-        model.addColumn("Jumlah Barang");
-        model.addColumn("Harga Beli");
-        model.addColumn("Total");
-        model.addColumn("Tanggal");
+        defaultTableModel = new DefaultTableModel();
+        tableinput.setModel(defaultTableModel);
+        defaultTableModel.addColumn("Kode Beli");
+        defaultTableModel.addColumn("Nama Supplier");
+        defaultTableModel.addColumn("Kategori Barang");
+        defaultTableModel.addColumn("Nama Barang");
+        defaultTableModel.addColumn("Satuan Barang");
+        defaultTableModel.addColumn("Jumlah Barang");
+        defaultTableModel.addColumn("Harga Beli");
+        defaultTableModel.addColumn("Total");
+        defaultTableModel.addColumn("Tanggal");
         loadData();
         tampilSupplier();
         tampilKategori();
@@ -56,28 +56,43 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
         bsimpan.setEnabled(true);
         bhapus.setEnabled(false);
         bedit.setEnabled(false);
-        model.getDataVector().removeAllElements();
-        model.fireTableDataChanged();
+        defaultTableModel.getDataVector().removeAllElements();
+        defaultTableModel.fireTableDataChanged();
         try {
-            Connection c = Koneksi.getKoneksi();
-            Statement st = c.createStatement();
             String sql = "SELECT * FROM belibarang";
-            try (ResultSet rs = st.executeQuery(sql)) {
-                while (rs.next()) {
-                    Object[] o = new Object[10];
-                    o[0] = rs.getString("kodebeli");
-                    o[1] = rs.getString("kodestock");
-                    o[2] = rs.getString("kodesupplier");
-                    o[3] = rs.getString("kodekategori");
-                    o[4] = rs.getString("kodebarang");
-                    o[5] = rs.getString("kodesatuan");
-                    o[6] = rs.getString("jumlahbarang");
-                    o[7] = rs.getString("hargabeli");
-                    o[8] = rs.getString("total");
-                    o[9] = rs.getString("tanggal");
-                    model.addRow(o);
-                }
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            Statement statementRelation = connection.createStatement();
+            ResultSet resultSetRelation;
+
+            while (resultSet.next()) {
+                Object[] objects = new Object[10];
+                objects[0] = resultSet.getString("kodebeli");
+
+                resultSetRelation = statementRelation.executeQuery("SELECT namasupplier FROM supplier WHERE kodesupplier = '" + resultSet.getString("kodesupplier") + "'");
+                resultSetRelation.next();
+                objects[1] = resultSetRelation.getString("namasupplier");
+
+                resultSetRelation = statementRelation.executeQuery("SELECT namakategori FROM kategori WHERE kodekategori = '" + resultSet.getString("kodekategori") + "'");
+                resultSetRelation.next();
+                objects[2] = resultSetRelation.getString("namakategori");
+
+                resultSetRelation = statementRelation.executeQuery("SELECT namabarang FROM barang WHERE kodebarang = '" + resultSet.getString("kodebarang") + "'");
+                resultSetRelation.next();
+                objects[3] = resultSetRelation.getString("namabarang");
+
+                resultSetRelation = statementRelation.executeQuery("SELECT namasatuan FROM satuan WHERE kodesatuan = '" + resultSet.getString("kodesatuan") + "'");
+                resultSetRelation.next();
+                objects[4] = resultSetRelation.getString("namasatuan");
+
+                objects[5] = resultSet.getString("jumlahbarang");
+                objects[6] = resultSet.getString("hargabeli");
+                objects[7] = resultSet.getString("total");
+                objects[8] = resultSet.getString("tanggal");
+                defaultTableModel.addRow(objects);
             }
+
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Data Gagal Disimpan" + e);
         }
@@ -86,11 +101,11 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
     private void tampilSupplier() {
         try {
             String sql = "SELECT * FROM supplier ORDER by kodesupplier";
-            PreparedStatement pst = conn.prepareStatement(sql);
-            try (ResultSet rs = pst.executeQuery(sql)) {
+            PreparedStatement pst = connection.prepareStatement(sql);
+            try (ResultSet resultSet = pst.executeQuery(sql)) {
                 System.out.println(sql);
-                while (rs.next()) {
-                    cksupplier.addItem(rs.getString("kodesupplier") + " " + rs.getString("namasupplier"));
+                while (resultSet.next()) {
+                    cksupplier.addItem(resultSet.getString("kodesupplier") + " " + resultSet.getString("namasupplier"));
                 }
             }
         } catch (SQLException e) {
@@ -101,10 +116,10 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
     private void tampilKategori() {
         try {
             String sql = "SELECT * FROM kategori ORDER by kodekategori";
-            PreparedStatement pst = conn.prepareStatement(sql);
-            try (ResultSet rs = pst.executeQuery(sql)) {
-                while (rs.next()) {
-                    ckkategori.addItem(rs.getString(1) + " " + rs.getString(2));
+            PreparedStatement pst = connection.prepareStatement(sql);
+            try (ResultSet resultSet = pst.executeQuery(sql)) {
+                while (resultSet.next()) {
+                    ckkategori.addItem(resultSet.getString(1) + " " + resultSet.getString(2));
                 }
             }
         } catch (SQLException e) {
@@ -115,10 +130,10 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
     private void tampilBarang() {
         try {
             String sql = "SELECT * FROM barang ORDER by kodebarang";
-            Statement st = conn.createStatement();
-            try (ResultSet rs = st.executeQuery(sql)) {
-                while (rs.next()) {
-                    ckbarang.addItem(rs.getString(1) + " " + rs.getString(2));
+            Statement st = connection.createStatement();
+            try (ResultSet resultSet = st.executeQuery(sql)) {
+                while (resultSet.next()) {
+                    ckbarang.addItem(resultSet.getString(1) + " " + resultSet.getString(2));
                 }
             }
         } catch (SQLException e) {
@@ -129,10 +144,10 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
     private void tampilSatuan() {
         try {
             String sql = "SELECT * FROM satuan ORDER by kodesatuan";
-            Statement st = conn.createStatement();
-            try (ResultSet rs = st.executeQuery(sql)) {
-                while (rs.next()) {
-                    cksatuan.addItem(rs.getString(1) + " " + rs.getString(2));
+            Statement st = connection.createStatement();
+            try (ResultSet resultSet = st.executeQuery(sql)) {
+                while (resultSet.next()) {
+                    cksatuan.addItem(resultSet.getString(1) + " " + resultSet.getString(2));
                 }
             }
         } catch (SQLException e) {
@@ -142,14 +157,14 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
 
     private void kodeBeli() {
         try {
-            conn = Koneksi.getKoneksi();
-            Statement st = conn.createStatement();
+            connection = Koneksi.getKoneksi();
+            Statement st = connection.createStatement();
 
             String sql = "SELECT * FROM belibarang ORDER by kodebeli DESC";
-            ResultSet rs = st.executeQuery(sql);
+            ResultSet resultSet = st.executeQuery(sql);
 
-            if (rs.next()) {
-                String kbar = rs.getString("kodebeli").substring(1);
+            if (resultSet.next()) {
+                String kbar = resultSet.getString("kodebeli").substring(1);
                 System.out.println(kbar);
                 String AN = "" + (Integer.parseInt(kbar) + 1);
                 String Nol = "";
@@ -194,12 +209,12 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
 
     private void kodeStock() {
         try {
-            conn = Koneksi.getKoneksi();
-            Statement st = conn.createStatement();
+            connection = Koneksi.getKoneksi();
+            Statement st = connection.createStatement();
             String sql = "SELECT * FROM stock ORDER BY kodestock DESC";
-            ResultSet rs = st.executeQuery(sql);
-            if (rs.next()) {
-                String kbar = rs.getString("kodestock").substring(1);
+            ResultSet resultSet = st.executeQuery(sql);
+            if (resultSet.next()) {
+                String kbar = resultSet.getString("kodestock").substring(1);
                 String AN = "" + (Integer.parseInt(kbar) + 1);
                 String Nol = "";
                 System.out.println(kbar + " " + AN + " " + Nol);
@@ -236,11 +251,11 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
             String rsupplier = cksupplier.getSelectedItem().toString().substring(0, 6);
             System.out.println(rsupplier);
             String sql = "SELECT * FROM supplier Where kodesupplier LIKE '" + rsupplier + "' ORDER BY kodesupplier ASC";
-            PreparedStatement pst = conn.prepareStatement(sql);
-            ResultSet rs = pst.executeQuery(sql);
+            PreparedStatement pst = connection.prepareStatement(sql);
+            ResultSet resultSet = pst.executeQuery(sql);
 
-            rs.absolute(1);
-            supplier = rs.getString("kodesupplier");
+            resultSet.absolute(1);
+            supplier = resultSet.getString("kodesupplier");
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e);
         }
@@ -251,10 +266,10 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
             String rkategori = ckkategori.getSelectedItem().toString().substring(0, 6);
             System.out.println(rkategori);
             String sql = "SELECT * FROM kategori WHERE kodekategori LIKE '" + rkategori + "' ORDER BY kodekategori ASC";
-            PreparedStatement pst = conn.prepareStatement(sql);
-            ResultSet rs = pst.executeQuery(sql);
-            rs.absolute(1);
-            rkategori = rs.getString("kodekategori");
+            PreparedStatement pst = connection.prepareStatement(sql);
+            ResultSet resultSet = pst.executeQuery(sql);
+            resultSet.absolute(1);
+            rkategori = resultSet.getString("kodekategori");
             kategori = rkategori;
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e);
@@ -266,10 +281,10 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
             String rbarang = ckbarang.getSelectedItem().toString().substring(0, 6);
             System.out.println(rbarang);
             String sql = "SELECT * FROM barang WHERE kodebarang LIKE '" + rbarang + "' ORDER BY kodebarang ASC";
-            PreparedStatement pst = conn.prepareStatement(sql);
-            ResultSet rs = pst.executeQuery(sql);
-            rs.absolute(1);
-            rbarang = rs.getString("kodebarang");
+            PreparedStatement pst = connection.prepareStatement(sql);
+            ResultSet resultSet = pst.executeQuery(sql);
+            resultSet.absolute(1);
+            rbarang = resultSet.getString("kodebarang");
             barang = rbarang;
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e);
@@ -281,10 +296,10 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
             String rsatuan = cksatuan.getSelectedItem().toString().substring(0, 6);
             System.out.println(rsatuan);
             String sql = "SELECT * FROM satuan WHERE kodesatuan LIKE '" + rsatuan + "' ORDER BY kodesatuan ASC";
-            PreparedStatement pst = conn.prepareStatement(sql);
-            ResultSet rs = pst.executeQuery(sql);
-            rs.absolute(1);
-            rsatuan = rs.getString("kodesatuan");
+            PreparedStatement pst = connection.prepareStatement(sql);
+            ResultSet resultSet = pst.executeQuery(sql);
+            resultSet.absolute(1);
+            rsatuan = resultSet.getString("kodesatuan");
             satuan = rsatuan;
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e);
@@ -646,10 +661,9 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
                 java.sql.Date date = new java.sql.Date(millis);
                 System.out.println(date);
                 String ttanggal = date.toString();
-                Connection c = Koneksi.getKoneksi();
                 String sql = "INSERT INTO belibarang VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 PreparedStatement pst;
-                pst = c.prepareStatement(sql);
+                pst = connection.prepareStatement(sql);
                 pst.setString(1, tkodebeli);
                 pst.setString(2, tkodestock);
                 pst.setString(3, tsupplier);
@@ -699,48 +713,36 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
             return;
         }
 
-        String tablesupplier = (String) model.getValueAt(i, 2);
+        String tablekodebeli = (String) defaultTableModel.getValueAt(i, 0);
+        textkbeli.setText(tablekodebeli);
+
+//        String tablekodestock = (String) defaultTableModel.getValueAt(i, 1);
+//        stock = tablekodestock;
+        String tablesupplier = (String) defaultTableModel.getValueAt(i, 1);
         cksupplier.setSelectedItem(tablesupplier);
 
-        String tablekategori = (String) model.getValueAt(i, 3);
+        String tablekategori = (String) defaultTableModel.getValueAt(i, 2);
         ckkategori.setSelectedItem(tablekategori);
 
-        String tablenamabarang = (String) model.getValueAt(i, 4);
+        String tablenamabarang = (String) defaultTableModel.getValueAt(i, 3);
         cksatuan.setSelectedItem(tablenamabarang);
 
-        String tablesatuan = (String) model.getValueAt(i, 5);
+        String tablesatuan = (String) defaultTableModel.getValueAt(i, 4);
         ckkategori.setSelectedItem(tablesatuan);
-
-        String tablejumlah = (String) model.getValueAt(i, 6);
-        textjumlah.setText(tablejumlah);
-
-        String tablehargabeli = (String) model.getValueAt(i, 7);
-        texthbeli.setText(tablehargabeli);
-
-        String tabletotal = (String) model.getValueAt(i, 8);
-        texttotal.setText(tabletotal);
-
-        String tablekodebeli = (String) model.getValueAt(i, 0);
-        textkbeli.setText(tablekodebeli);
-        textkbeli.setEnabled(false);
-
-        String tablekodestock = (String) model.getValueAt(i, 1);
-        stock = tablekodestock;
 
     }//GEN-LAST:event_tableinputMouseClicked
     private void bhapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bhapusActionPerformed
         try {
             String sql = "DELETE FROM belibarang WHERE kodebeli='" + textkbeli.getText() + "'";
-            conn = (Connection) Koneksi.getKoneksi();
-            PreparedStatement pst = conn.prepareStatement(sql);
+            PreparedStatement pst = connection.prepareStatement(sql);
             pst.execute();
         } catch (HeadlessException | SQLException e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
 //        try {
 //            String sql = "DELETE FROM stock WHERE kodestock='" + stock + "'";
-//            conn = (Connection) Koneksi.getKoneksi();
-//            PreparedStatement pst = conn.prepareStatement(sql);
+//            connection = (Connection) Koneksi.getKoneksi();
+//            PreparedStatement pst = connection.prepareStatement(sql);
 //            pst.execute();
 //            JOptionPane.showMessageDialog(null, "DATA BERHASIL DIHAPUS", "PT MULIA JAYA TEXTILE", JOptionPane.INFORMATION_MESSAGE);
 //        } catch (HeadlessException | SQLException e) {
@@ -758,10 +760,10 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, "LENGKAPI DATA !", "PT MULIA JAYA TEXTILE", JOptionPane.INFORMATION_MESSAGE);
         } else {
             try {
-                conn = Koneksi.getKoneksi();
+                connection = Koneksi.getKoneksi();
                 String sql = "UPDATE belibarang SET kodestock=?, kodesupplier=?, kodekategori=?, kodebarang=?, kodesatuan=?, jumlahbarang=?, hargabeli=?, total=? where kodebeli='" + textkbeli.getText() + "'";
                 PreparedStatement pst;
-                pst = conn.prepareStatement(sql);
+                pst = connection.prepareStatement(sql);
                 pst.setString(1, stock);
                 pst.setString(2, cksupplier.getSelectedItem().toString().substring(0, 6));
                 pst.setString(3, ckkategori.getSelectedItem().toString().substring(0, 6));
@@ -776,10 +778,10 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(null, "Data Gagal Diubah" + e);
             }
 //            try {
-//                conn = Koneksi.getKoneksi();
+//                connection = Koneksi.getKoneksi();
 //                String sql = "UPDATE stock SET kodekategori=?, kodebarang=?, kodesatuan=?, jumlahbarang=?, hargabeli=?, total=? WHERE kodestock='" + stock + "'";
 //                PreparedStatement pst;
-//                pst = conn.prepareStatement(sql);
+//                pst = connection.prepareStatement(sql);
 //                pst.setString(1, ckkategori.getSelectedItem().toString().substring(0, 6));
 //                pst.setString(2, ckbarang.getSelectedItem().toString().substring(0, 6));
 //                pst.setString(3, cksatuan.getSelectedItem().toString().substring(0, 6));
@@ -799,12 +801,12 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_beditActionPerformed
 
     private void textcariKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textcariKeyReleased
-        model.getDataVector().removeAllElements();
-        model.fireTableDataChanged();
+        defaultTableModel.getDataVector().removeAllElements();
+        defaultTableModel.fireTableDataChanged();
 
         try {
-            conn = Koneksi.getKoneksi();
-            try (Statement st = conn.createStatement()) {
+            connection = Koneksi.getKoneksi();
+            try (Statement st = connection.createStatement()) {
                 String sql = "SELECT * FROM belibarang WHERE "
                         + "kodebeli LIKE '%" + textcari.getText()
                         + "%' OR kodestock LIKE'%" + textcari.getText()
@@ -818,19 +820,19 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
                         + "%' OR tanggal LIKE'%" + textcari.getText() + "%'";
                 try (ResultSet rstest = st.executeQuery(sql)) {
                     while (rstest.next()) {
-                        Object[] o = new Object[10];
-                        o[0] = rstest.getString("kodebeli");
-                        o[1] = rstest.getString("kodestock");
-                        o[2] = rstest.getString("namasupplier");
-                        o[3] = rstest.getString("namakategori");
-                        o[4] = rstest.getString("namabarang");
-                        o[5] = rstest.getString("namasatuan");
-                        o[6] = rstest.getString("jumlahbarang");
-                        o[7] = rstest.getString("hargabeli");
-                        o[8] = rstest.getString("total");
-                        o[9] = rstest.getString("tanggal");
+                        Object[] objects = new Object[10];
+                        objects[0] = rstest.getString("kodebeli");
+                        objects[1] = rstest.getString("kodestock");
+                        objects[2] = rstest.getString("namasupplier");
+                        objects[3] = rstest.getString("namakategori");
+                        objects[4] = rstest.getString("namabarang");
+                        objects[5] = rstest.getString("namasatuan");
+                        objects[6] = rstest.getString("jumlahbarang");
+                        objects[7] = rstest.getString("hargabeli");
+                        objects[8] = rstest.getString("total");
+                        objects[9] = rstest.getString("tanggal");
 
-                        model.addRow(o);
+                        defaultTableModel.addRow(objects);
                     }
                 }
             }
