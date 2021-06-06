@@ -639,7 +639,7 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
     private void jumlahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jumlahActionPerformed
         hj = Integer.parseInt(texthjual.getText());
         jj = Integer.parseInt(textjjual.getText());
-        if (Integer.parseInt(texthbeli.getText()) > Integer.parseInt(textjjual.getText())) {
+        if (Integer.parseInt(texthbeli.getText()) > Integer.parseInt(texthjual.getText())) {
             JOptionPane.showMessageDialog(null, "Harga pemasukan barang lebih kecil dari pemasukan");
         } else {
             jum = hj * jj;
