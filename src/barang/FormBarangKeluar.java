@@ -166,7 +166,7 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
             String sql = "SELECT * FROM jualbarang ORDER BY faktur DESC";
             ResultSet rs = st.executeQuery(sql);
             if (rs.next()) {
-                String kbar = rs.getString("faktur").substring(6);
+                String kbar = rs.getString("faktur").substring(1);
                 System.out.println(kbar);
                 String AN = "" + (Integer.parseInt(kbar) + 1);
                 String Nol = "";
@@ -189,9 +189,9 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
         } catch (NumberFormatException | SQLException e) {
             JOptionPane.showMessageDialog(null, e);
         }
-        String rpelanggan = cnpelanggan.getSelectedItem().toString().substring(0, 6);
-        String rbeli = cnbarang.getSelectedItem().toString().substring(0, 6);
-        String rsatuan = textnsatuan.getText().substring(0, 6);
+//        String rpelanggan = cnpelanggan.getSelectedItem().toString().substring(0, 6);
+//        String rbeli = cnbarang.getSelectedItem().toString().substring(0, 6);
+//        String rsatuan = textnsatuan.getText().substring(0, 6);
         textfaktur.setText(awal);
     }
 
