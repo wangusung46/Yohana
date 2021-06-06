@@ -622,7 +622,7 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
         kem = bay - tot;
         if (kem < 0) {
             JOptionPane.showMessageDialog(null, "Pembayaran tidak mencukupi total penjualan");
-            JOptionPane.showMessageDialog(null, "Kurang Rp."+(Integer.parseInt((texthbeli.getText())) - Integer.parseInt(texthjual.getText())));
+            JOptionPane.showMessageDialog(null, "Kurang Rp."+(Integer.parseInt((texttbarang.getText())) - Integer.parseInt(texthjual.getText())));
         } else {
             totbel = bel * jj;
             unt = tot - totbel;
