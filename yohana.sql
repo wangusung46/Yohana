@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 06, 2021 at 08:10 AM
+-- Generation Time: Jun 06, 2021 at 10:22 AM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 8.0.3
 
@@ -37,11 +37,7 @@ CREATE TABLE `barang` (
 --
 
 INSERT INTO `barang` (`kodebarang`, `namabarang`) VALUES
-('301', 'Zee Coco Bom'),
-('302', 'Sweety Bronze Pants M'),
-('303', 'Sweety Silver Pants M'),
-('304', 'Confidance AD. Classic Night L'),
-('305', 'Happy Nappy Smart Pant M');
+('E00001', 'xdrhxdrhxdrh');
 
 -- --------------------------------------------------------
 
@@ -50,12 +46,12 @@ INSERT INTO `barang` (`kodebarang`, `namabarang`) VALUES
 --
 
 CREATE TABLE `belibarang` (
-  `kodebeli` varchar(18) NOT NULL,
+  `kodebeli` varchar(99) NOT NULL,
   `kodestock` varchar(12) NOT NULL,
-  `kodesupplier` varchar(3) NOT NULL,
-  `kodekategori` varchar(3) NOT NULL,
-  `kodebarang` varchar(3) NOT NULL,
-  `kodesatuan` varchar(3) NOT NULL,
+  `kodesupplier` varchar(6) NOT NULL,
+  `kodekategori` varchar(6) NOT NULL,
+  `kodebarang` varchar(6) NOT NULL,
+  `kodesatuan` varchar(6) NOT NULL,
   `jumlahbarang` int(12) NOT NULL,
   `hargabeli` int(12) NOT NULL,
   `total` int(12) NOT NULL,
@@ -67,7 +63,7 @@ CREATE TABLE `belibarang` (
 --
 
 INSERT INTO `belibarang` (`kodebeli`, `kodestock`, `kodesupplier`, `kodekategori`, `kodebarang`, `kodesatuan`, `jumlahbarang`, `hargabeli`, `total`, `tanggal`) VALUES
-('101201301402602', '70006', '101', '201', '301', '402', 35, 35000, 1225000, '2021-06-06');
+('C00001D00001E00001B00001F00001', 'G00001', 'C00001', 'D00001', 'E00001', 'B00001', 6, 457, 2742, '2021-06-06');
 
 -- --------------------------------------------------------
 
@@ -89,10 +85,10 @@ CREATE TABLE `datauntung` (
 --
 
 CREATE TABLE `jualbarang` (
-  `faktur` varchar(21) NOT NULL,
-  `kodepelanggan` varchar(3) NOT NULL,
+  `faktur` varchar(99) NOT NULL,
+  `kodepelanggan` varchar(6) NOT NULL,
   `kodebarang` varchar(12) NOT NULL,
-  `kodesatuan` varchar(3) NOT NULL,
+  `kodesatuan` varchar(6) NOT NULL,
   `hargajual` int(12) NOT NULL,
   `jumlahjual` int(4) NOT NULL,
   `hargajualtotal` int(12) NOT NULL,
@@ -107,7 +103,7 @@ CREATE TABLE `jualbarang` (
 --
 
 INSERT INTO `jualbarang` (`faktur`, `kodepelanggan`, `kodebarang`, `kodesatuan`, `hargajual`, `jumlahjual`, `hargajualtotal`, `bayar`, `kembali`, `untung`, `tanggal`) VALUES
-('405301402801', '405', '301', '402', 36000, 3, 108000, 200000, 92000, 3000, '2021-06-06');
+('A00001E00001B00001801', 'A00001', 'E00001', 'B00001', 500, 5, 2500, 3000, 500, 215, '2021-06-06');
 
 -- --------------------------------------------------------
 
@@ -125,10 +121,7 @@ CREATE TABLE `kategori` (
 --
 
 INSERT INTO `kategori` (`kodekategori`, `namakategori`) VALUES
-('201', 'Minuman'),
-('204', 'Popok'),
-('203', 'Snack'),
-('202', 'Tisu');
+('D00001', 'xdrhxdrh');
 
 -- --------------------------------------------------------
 
@@ -171,11 +164,8 @@ CREATE TABLE `pelanggan` (
 --
 
 INSERT INTO `pelanggan` (`kodepelanggan`, `namapelanggan`, `jeniskelamin`, `nomortelepon`, `alamat`) VALUES
-('405', 'Ham', 'Laki-Laki', '085245987856', 'Tangerang'),
-('501', 'Acilo', 'Laki-Laki', '085245963258', 'Tanjung Barat'),
-('502', 'Mohan Pelupessy', 'Laki-Laki', '085265485632', 'Gedong'),
-('503', 'Thia', 'Perempuan', '081569859623', 'Gedong'),
-('504', 'Nur', 'Perempuan', '085265425698', 'Depok');
+('A00001', 'fctu', 'Laki-Laki', '864', 'ftcuftcu'),
+('A00002', 'cft', 'Perempuan', '486', 'yfcj');
 
 -- --------------------------------------------------------
 
@@ -216,11 +206,7 @@ CREATE TABLE `satuan` (
 --
 
 INSERT INTO `satuan` (`kodesatuan`, `namasatuan`) VALUES
-('406', 'Bungkus'),
-('402', 'Kodi'),
-('403', 'Lusin'),
-('408', 'Pack'),
-('407', 'Roll');
+('B00001', 'rdyhrdh');
 
 -- --------------------------------------------------------
 
@@ -237,17 +223,6 @@ CREATE TABLE `stock` (
   `hargabeli` int(12) NOT NULL,
   `total` int(12) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `stock`
---
-
-INSERT INTO `stock` (`kodestock`, `namakategori`, `namabarang`, `namasatuan`, `jumlahbarang`, `hargabeli`, `total`) VALUES
-('70001', 'Popok', 'Confidance AD. Classic Night L', 'Pack', 88, 42000, 4116000),
-('70002', 'Minuman', 'Zee Coco Bom', 'Bungkus', 97, 12000, 1164000),
-('70003', 'Tisu', 'Sweety Silver Pants M', 'Roll', 51, 26000, 1560000),
-('70004', 'Minuman', 'Zee Coco Bom', 'Bungkus', 10, 12000, 120000),
-('70005', 'Minuman', 'Zee Coco Bom', 'Bungkus', 78, 9000, 702000);
 
 -- --------------------------------------------------------
 
@@ -271,11 +246,7 @@ CREATE TABLE `supplier` (
 --
 
 INSERT INTO `supplier` (`kodesupplier`, `namasupplier`, `alamat`, `nomortelepon`, `norekening`, `bank`, `email`, `tanggal`) VALUES
-('101', 'PT KHANZA', 'Masohi', '081343052810', '856587541258', 'BNI', 'khanza@gmail.com', '2020-01-26'),
-('102', 'PT LIEDY', 'Gedong', '082123299528', '856258654452', 'BRI', 'liedy@gmail.com', '2020-01-26'),
-('103', 'PT GUSUNG', 'Banda', '085245698523', '523659874526', 'Danamon', 'gusung@gmail.com', '2020-01-27'),
-('104', 'PT HARUKU', 'Depok', '085245968524', '852654789582', 'Mandiri', 'haruku@gmail.com', '2020-02-01'),
-('105', 'PT KAREPESINA', 'Pemalang', '081280695371', '877118371910', 'BRI', 'karepesina@gmail.com', '2020-02-10');
+('C00001', 'cftj', 'fctjcft', '48647', '4876', 'drxghedsx', 'cftj', '2021-06-06');
 
 --
 -- Indexes for dumped tables
