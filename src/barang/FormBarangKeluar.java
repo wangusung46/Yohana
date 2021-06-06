@@ -622,6 +622,7 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
         kem = bay - tot;
         if (kem < 0) {
             JOptionPane.showMessageDialog(null, "Pembayaran tidak mencukupi total penjualan");
+            JOptionPane.showMessageDialog(null, "Kurang Rp."+(Integer.parseInt((texthbeli.getText())) - Integer.parseInt(texthjual.getText())));
         } else {
             totbel = bel * jj;
             unt = tot - totbel;
@@ -640,7 +641,8 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
         hj = Integer.parseInt(texthjual.getText());
         jj = Integer.parseInt(textjjual.getText());
         if (Integer.parseInt(texthbeli.getText()) > Integer.parseInt(texthjual.getText())) {
-            JOptionPane.showMessageDialog(null, "Harga pemasukan barang lebih kecil dari pemasukan");
+            JOptionPane.showMessageDialog(null, "Harga pengeluaran barang lebih kecil dari pemasukan");
+            
         } else {
             jum = hj * jj;
             String jumlahLocal = String.valueOf(jum);
