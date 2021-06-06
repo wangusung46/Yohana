@@ -349,7 +349,7 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
         panelTanggalJual.setLayout(new java.awt.GridLayout(1, 0));
 
         jLabel13.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel13.setText("Harga Jual");
+        jLabel13.setText("Harga Pengeluaran");
         panelTanggalJual.add(jLabel13);
 
         texthjual.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -620,12 +620,16 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
         jj = Integer.parseInt(textjjual.getText());
         bel = Integer.parseInt(texthbeli.getText());
         kem = bay - tot;
-        totbel = bel * jj;
-        unt = tot - totbel;
-        String kembali = String.valueOf(kem);
-        textkembali.setText(kembali);
-        String untung = String.valueOf(unt);
-        textuntung.setText(untung);
+        if (kem < 0) {
+            JOptionPane.showMessageDialog(null, "Pembayaran tidak mencukupi total penjualan");
+        } else {
+            totbel = bel * jj;
+            unt = tot - totbel;
+            String kembali = String.valueOf(kem);
+            textkembali.setText(kembali);
+            String untung = String.valueOf(unt);
+            textuntung.setText(untung);
+        }
     }//GEN-LAST:event_btotalActionPerformed
 
     private void texthjualKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_texthjualKeyTyped
@@ -635,9 +639,13 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
     private void jumlahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jumlahActionPerformed
         hj = Integer.parseInt(texthjual.getText());
         jj = Integer.parseInt(textjjual.getText());
-        jum = hj * jj;
-        String jumlahLocal = String.valueOf(jum);
-        texttbarang.setText(jumlahLocal);
+        if (Integer.parseInt(texthbeli.getText()) > Integer.parseInt(textjjual.getText())) {
+            JOptionPane.showMessageDialog(null, "Harga pemasukan barang lebih kecil dari pemasukan");
+        } else {
+            jum = hj * jj;
+            String jumlahLocal = String.valueOf(jum);
+            texttbarang.setText(jumlahLocal);
+        }
     }//GEN-LAST:event_jumlahActionPerformed
 
     private void cnpelangganActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cnpelangganActionPerformed
