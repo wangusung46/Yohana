@@ -66,13 +66,19 @@ public class FormKategori extends javax.swing.JInternalFrame {
                 String Nol = "";
 
                 if (AN.length() == 1) {
-                    Nol = "0";
+                    Nol = "0000";
                 } else if (AN.length() == 2) {
+                    Nol = "000";
+                } else if (AN.length() == 3) {
+                    Nol = "00";
+                } else if (AN.length() == 4) {
+                    Nol = "0";
+                } else if (AN.length() == 5) {
                     Nol = "";
                 }
-                textkkategori.setText("4" + Nol + AN);
+                textkkategori.setText("D" + Nol + AN);
             } else {
-                textkkategori.setText("401");
+                textkkategori.setText("D00001");
             }
         } catch (NumberFormatException | SQLException e) {
             JOptionPane.showMessageDialog(null, e);

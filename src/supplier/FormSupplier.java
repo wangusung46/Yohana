@@ -82,13 +82,19 @@ public class FormSupplier extends javax.swing.JInternalFrame {
                 String AN = "" + (Integer.parseInt(ksupp) + 1);
                 String Nol = "";
                 if (AN.length() == 1) {
-                    Nol = "0";
+                    Nol = "0000";
                 } else if (AN.length() == 2) {
+                    Nol = "000";
+                } else if (AN.length() == 3) {
+                    Nol = "00";
+                } else if (AN.length() == 4) {
+                    Nol = "0";
+                } else if (AN.length() == 5) {
                     Nol = "";
                 }
-                textksupplier.setText("3" + Nol + AN);
+                textksupplier.setText("C" + Nol + AN);
             } else {
-                textksupplier.setText("301");
+                textksupplier.setText("C00001");
             }
         } catch (NumberFormatException | SQLException e) {
             JOptionPane.showMessageDialog(this, e.getMessage());

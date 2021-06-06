@@ -113,13 +113,15 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
         try {
             String sql1, sql2;
             sql1 = "SELECT * FROM belibarang GROUP BY kodebarang";
+
             Statement st1 = conn.createStatement();
             Statement st2 = conn.createStatement();
             ResultSet rs1, rs2;
             rs1 = st1.executeQuery(sql1);
             int i = 0;
             while (rs1.next()) {
-                sql2 = "SELECT * FROM barang WHERE kodebarang = " + rs1.getString("kodebarang") + "";
+                sql2 = "SELECT * FROM barang WHERE kodebarang = '" + rs1.getString("kodebarang") + "'";
+                System.out.println(sql2);
                 rs2 = st2.executeQuery(sql2);
                 rs2.next();
                 cnbarang.addItem(rs2.getString("kodebarang") + " " + rs2.getString("namabarang"));
@@ -134,7 +136,7 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
         try {
             int i = 1;
             String sql1 = "SELECT * FROM belibarang WHERE kodebarang LIKE '"
-                    + cnbarang.getSelectedItem().toString().substring(0, 3)
+                    + cnbarang.getSelectedItem().toString().substring(0, 6)
                     + "' GROUP BY kodebarang";
             System.out.println(sql1);
             Statement st1 = conn.createStatement();
@@ -142,8 +144,8 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
             rs1 = st1.executeQuery(sql1);
             rs1.absolute(i);
 
-            String sql2 = "SELECT * FROM satuan WHERE kodesatuan = "
-                    + rs1.getString("kodesatuan");
+            String sql2 = "SELECT * FROM satuan WHERE kodesatuan = '"
+                    + rs1.getString("kodesatuan") + "'";
             System.out.println(sql2);
             Statement st2 = conn.createStatement();
             ResultSet rs2;
@@ -181,12 +183,12 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
         } catch (NumberFormatException | SQLException e) {
             JOptionPane.showMessageDialog(null, e);
         }
-        String rpelanggan = cnpelanggan.getSelectedItem().toString().substring(0, 3);
-        String rbeli = cnbarang.getSelectedItem().toString().substring(0, 3);
-        String rsatuan = textnsatuan.getText().substring(0, 3);
+        String rpelanggan = cnpelanggan.getSelectedItem().toString().substring(0, 6);
+        String rbeli = cnbarang.getSelectedItem().toString().substring(0, 6);
+        String rsatuan = textnsatuan.getText().substring(0, 6);
         textfaktur.setText(rpelanggan + rbeli + rsatuan + awal);
     }
-    
+
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -530,9 +532,9 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, "LENGKAPI DATA !", "PT MULIA JAYA TEXTILE", JOptionPane.INFORMATION_MESSAGE);
         } else {
             String tfaktur = textfaktur.getText();
-            String tkpelanggan = cnpelanggan.getSelectedItem().toString().substring(0, 3);
-            String tkbarang = cnbarang.getSelectedItem().toString().substring(0, 3);
-            String tksatuan = textnsatuan.getText().substring(0, 3);
+            String tkpelanggan = cnpelanggan.getSelectedItem().toString().substring(0, 6);
+            String tkbarang = cnbarang.getSelectedItem().toString().substring(0, 6);
+            String tksatuan = textnsatuan.getText().substring(0, 6);
             String thjual = texthjual.getText();
             String tjjual = textjjual.getText();
             String thjtotal = texttbarang.getText();
@@ -733,8 +735,8 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
 
     private void relasiCetak() {
         String rcetak = ("%" + ccetak.getSelectedItem().toString() + "%");
-        String rbarang = ("%" + cnbarang.getSelectedItem().toString().substring(0, 3) + "%");
-        String rsatuan = ("%" + textnsatuan.getText().substring(0, 3) + "%");
+        String rbarang = ("%" + cnbarang.getSelectedItem().toString().substring(0, 6) + "%");
+        String rsatuan = ("%" + textnsatuan.getText().substring(0, 6) + "%");
 //        String reportSource;
         try {
 //            com.mysql.jdbc.Connection c = (com.mysql.jdbc.Connection) conn;
@@ -746,7 +748,7 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
             InputStream file = getClass().getResourceAsStream("/report/report1.jrxml");
             JasperDesign JasperDesign = JRXmlLoader.load(file);
             JasperReport JasperReport = JasperCompileManager.compileReport(JasperDesign);
-            JasperPrint JasperPrint = JasperFillManager.fillReport(JasperReport, parameter, conn );
+            JasperPrint JasperPrint = JasperFillManager.fillReport(JasperReport, parameter, conn);
             JasperViewer.viewReport(JasperPrint, false);
         } catch (JRException e) {
             System.out.println(e);

@@ -150,16 +150,22 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
             ResultSet rs = st.executeQuery(sql);
 
             if (rs.next()) {
-                String kbar = rs.getString("kodebeli").substring(13);
+                String kbar = rs.getString("kodebeli").substring(28);
                 System.out.println(kbar);
                 String AN = "" + (Integer.parseInt(kbar) + 1);
                 String Nol = "";
                 if (AN.length() == 1) {
-                    Nol = "0";
+                    Nol = "0000";
                 } else if (AN.length() == 2) {
+                    Nol = "000";
+                } else if (AN.length() == 3) {
+                    Nol = "00";
+                } else if (AN.length() == 4) {
+                    Nol = "0";
+                } else if (AN.length() == 5) {
                     Nol = "";
                 }
-                kbar = "6" + Nol + AN;
+                kbar = "F" + Nol + AN;
                 String rsupplier = supplier;
                 System.out.println(rsupplier);
                 String rkategori = kategori;
@@ -171,7 +177,7 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
                     JOptionPane.showMessageDialog(null, e);
                 }
             } else {
-                String kbar = "601";
+                String kbar = "F00001";
                 String rsupplier = supplier;
                 String rkategori = kategori;
                 String rbarang = barang;
@@ -200,23 +206,26 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
                 System.out.println(kbar + " " + AN + " " + Nol);
                 switch (AN.length()) {
                     case 1:
-                        Nol = "000";
+                        Nol = "0000";
                         break;
                     case 2:
-                        Nol = "00";
+                        Nol = "000";
                         break;
                     case 3:
-                        Nol = "0";
+                        Nol = "00";
                         break;
                     case 4:
+                        Nol = "0";
+                        break;
+                    case 5:
                         Nol = "";
                         break;
                     default:
                         break;
                 }
-                stock = "7" + Nol + AN;
+                stock = "G" + Nol + AN;
             } else {
-                stock = "70001";
+                stock = "G00001";
             }
         } catch (NumberFormatException | SQLException e) {
             JOptionPane.showMessageDialog(null, e);
@@ -225,7 +234,7 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
 
     private void tampilKodeSupplier() {
         try {
-            String rsupplier = cksupplier.getSelectedItem().toString().substring(0, 3);
+            String rsupplier = cksupplier.getSelectedItem().toString().substring(0, 6);
             System.out.println(rsupplier);
             String sql = "SELECT * FROM supplier Where kodesupplier LIKE '" + rsupplier + "' ORDER BY kodesupplier ASC";
             PreparedStatement pst = conn.prepareStatement(sql);
@@ -240,7 +249,7 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
 
     private void tampilKodeKategori() {
         try {
-            String rkategori = ckkategori.getSelectedItem().toString().substring(0, 3);
+            String rkategori = ckkategori.getSelectedItem().toString().substring(0, 6);
             System.out.println(rkategori);
             String sql = "SELECT * FROM kategori WHERE kodekategori LIKE '" + rkategori + "' ORDER BY kodekategori ASC";
             PreparedStatement pst = conn.prepareStatement(sql);
@@ -255,7 +264,7 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
 
     private void tampilKodeBarang() {
         try {
-            String rbarang = ckbarang.getSelectedItem().toString().substring(0, 3);
+            String rbarang = ckbarang.getSelectedItem().toString().substring(0, 6);
             System.out.println(rbarang);
             String sql = "SELECT * FROM barang WHERE kodebarang LIKE '" + rbarang + "' ORDER BY kodebarang ASC";
             PreparedStatement pst = conn.prepareStatement(sql);
@@ -270,7 +279,7 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
 
     private void tampilKodeSatuan() {
         try {
-            String rsatuan = cksatuan.getSelectedItem().toString().substring(0, 3);
+            String rsatuan = cksatuan.getSelectedItem().toString().substring(0, 6);
             System.out.println(rsatuan);
             String sql = "SELECT * FROM satuan WHERE kodesatuan LIKE '" + rsatuan + "' ORDER BY kodesatuan ASC";
             PreparedStatement pst = conn.prepareStatement(sql);
@@ -626,10 +635,10 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
         } else {
             String tkodebeli = textkbeli.getText();
             String tkodestock = stock;
-            String tsupplier = cksupplier.getSelectedItem().toString().substring(0, 3);
-            String tkategori = ckkategori.getSelectedItem().toString().substring(0, 3);
-            String tkodebarang = ckbarang.getSelectedItem().toString().substring(0, 3);
-            String tsatuan = cksatuan.getSelectedItem().toString().substring(0, 3);
+            String tsupplier = cksupplier.getSelectedItem().toString().substring(0, 6);
+            String tkategori = ckkategori.getSelectedItem().toString().substring(0, 6);
+            String tkodebarang = ckbarang.getSelectedItem().toString().substring(0, 6);
+            String tsatuan = cksatuan.getSelectedItem().toString().substring(0, 6);
             String tjumlah = textjumlah.getText();
             String thargabeli = texthbeli.getText();
             String ttotal = texttotal.getText();
@@ -755,10 +764,10 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
                 PreparedStatement pst;
                 pst = conn.prepareStatement(sql);
                 pst.setString(1, stock);
-                pst.setString(2, cksupplier.getSelectedItem().toString().substring(0, 3));
-                pst.setString(3, ckkategori.getSelectedItem().toString().substring(0, 3));
-                pst.setString(4, ckbarang.getSelectedItem().toString().substring(0, 3));
-                pst.setString(5, cksatuan.getSelectedItem().toString().substring(0, 3));
+                pst.setString(2, cksupplier.getSelectedItem().toString().substring(0, 6));
+                pst.setString(3, ckkategori.getSelectedItem().toString().substring(0, 6));
+                pst.setString(4, ckbarang.getSelectedItem().toString().substring(0, 6));
+                pst.setString(5, cksatuan.getSelectedItem().toString().substring(0, 6));
                 pst.setString(6, textjumlah.getText());
                 pst.setString(7, texthbeli.getText());
                 pst.setString(8, texttotal.getText());
@@ -772,9 +781,9 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
 //                String sql = "UPDATE stock SET kodekategori=?, kodebarang=?, kodesatuan=?, jumlahbarang=?, hargabeli=?, total=? WHERE kodestock='" + stock + "'";
 //                PreparedStatement pst;
 //                pst = conn.prepareStatement(sql);
-//                pst.setString(1, ckkategori.getSelectedItem().toString().substring(0, 3));
-//                pst.setString(2, ckbarang.getSelectedItem().toString().substring(0, 3));
-//                pst.setString(3, cksatuan.getSelectedItem().toString().substring(0, 3));
+//                pst.setString(1, ckkategori.getSelectedItem().toString().substring(0, 6));
+//                pst.setString(2, ckbarang.getSelectedItem().toString().substring(0, 6));
+//                pst.setString(3, cksatuan.getSelectedItem().toString().substring(0, 6));
 //                pst.setString(4, textjumlah.getText());
 //                pst.setString(5, texthbeli.getText());
 //                pst.setString(6, texttotal.getText());

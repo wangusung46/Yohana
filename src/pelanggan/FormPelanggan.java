@@ -89,13 +89,19 @@ public class FormPelanggan extends javax.swing.JInternalFrame {
                 String Nol = "";
 
                 if (AN.length() == 1) {
-                    Nol = "0";
+                    Nol = "0000";
                 } else if (AN.length() == 2) {
+                    Nol = "000";
+                } else if (AN.length() == 3) {
+                    Nol = "00";
+                } else if (AN.length() == 4) {
+                    Nol = "0";
+                } else if (AN.length() == 5) {
                     Nol = "";
                 }
-                textkpelanggan.setText("1" + Nol + AN);
+                textkpelanggan.setText("A" + Nol + AN);
             } else {
-                textkpelanggan.setText("101");
+                textkpelanggan.setText("A00001");
             }
         } catch (NumberFormatException | SQLException e) {
             JOptionPane.showMessageDialog(null, e);

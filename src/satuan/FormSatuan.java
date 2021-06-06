@@ -65,13 +65,19 @@ public class FormSatuan extends javax.swing.JInternalFrame {
                 String Nol = "";
 
                 if (AN.length() == 1) {
-                    Nol = "0";
+                    Nol = "0000";
                 } else if (AN.length() == 2) {
+                    Nol = "000";
+                } else if (AN.length() == 3) {
+                    Nol = "00";
+                } else if (AN.length() == 4) {
+                    Nol = "0";
+                } else if (AN.length() == 5) {
                     Nol = "";
                 }
-                textksatuan.setText("2" + Nol + AN);
+                textksatuan.setText("B" + Nol + AN);
             } else {
-                textksatuan.setText("201");
+                textksatuan.setText("B00001");
             }
         } catch (NumberFormatException | SQLException e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
