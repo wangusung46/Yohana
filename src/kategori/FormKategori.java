@@ -39,10 +39,9 @@ public class FormKategori extends javax.swing.JInternalFrame {
             sql = "SELECT * FROM kategori ORDER BY kodekategori";
             rs = st.executeQuery(sql);
             while (rs.next()) {
-                Object[] o = new Object[8];
+                Object[] o = new Object[2];
                 o[0] = rs.getString("kodekategori");
                 o[1] = rs.getString("namakategori");
-
                 model.addRow(o);
             }
             rs.close();
@@ -57,14 +56,13 @@ public class FormKategori extends javax.swing.JInternalFrame {
             conn = Koneksi.getKoneksi();
             st = conn.createStatement();
 
-            sql = "SELECT * FROM kategori";
+            sql = "SELECT kodekategori FROM kategori ORDER by kodekategori DESC";
             rs = st.executeQuery(sql);
 
             if (rs.next()) {
                 String ksat = rs.getString("kodekategori").substring(1);
                 String AN = "" + (Integer.parseInt(ksat) + 1);
                 String Nol = "";
-
                 if (AN.length() == 1) {
                     Nol = "0000";
                 } else if (AN.length() == 2) {
@@ -77,6 +75,7 @@ public class FormKategori extends javax.swing.JInternalFrame {
                     Nol = "";
                 }
                 textkkategori.setText("D" + Nol + AN);
+                System.out.println("D" + Nol + AN);
             } else {
                 textkkategori.setText("D00001");
             }
