@@ -439,7 +439,6 @@ public class FormSupplier extends javax.swing.JInternalFrame {
         textrekening.setText("");
         textbank.setText("");
         textemail.setText("");
-        textemail.setText("");
     }//GEN-LAST:event_bhapusActionPerformed
 
     private void beditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_beditActionPerformed
@@ -456,9 +455,12 @@ public class FormSupplier extends javax.swing.JInternalFrame {
                 return;
             }
             try {
+                long millis = System.currentTimeMillis();
+                date = new java.sql.Date(millis);
+                System.out.println(date);
                 String ttanggal = date.toString();
                 conn = Koneksi.getKoneksi();
-                sql = "UPDATE supplier SET namasupplier=?, alamat=?, nomortelepon=?, norekening=?, bank=?, email=? where kodesupplier='" + textksupplier.getText() + "'";
+                sql = "UPDATE supplier SET namasupplier=?, alamat=?, nomortelepon=?, norekening=?, bank=?, email=?, tanggal=? where kodesupplier='" + textksupplier.getText() + "'";
                 pst = conn.prepareStatement(sql);
                 pst.setString(1, textnsupplier.getText());
                 pst.setString(2, textalamat.getText());
