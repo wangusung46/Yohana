@@ -104,6 +104,8 @@ public class FormBarang extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jPanel4 = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         panelKode = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
@@ -129,12 +131,21 @@ public class FormBarang extends javax.swing.JInternalFrame {
 
         jPanel4.setBackground(new java.awt.Color(0, 51, 51));
 
+        jPanel5.setBackground(new java.awt.Color(102, 102, 255));
+        jPanel5.setForeground(new java.awt.Color(0, 0, 255));
+
+        jLabel1.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel1.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("FORM BARANG");
+        jPanel5.add(jLabel1);
+
         jPanel3.setLayout(new java.awt.GridLayout(0, 2));
 
         panelKode.setLayout(new java.awt.GridLayout(1, 0));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("Kode Barang");
         panelKode.add(jLabel8);
         panelKode.add(textkbarang);
@@ -144,7 +155,6 @@ public class FormBarang extends javax.swing.JInternalFrame {
         panelSupplier.setLayout(new java.awt.GridLayout(1, 0));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Nama Barang");
         panelSupplier.add(jLabel3);
         panelSupplier.add(textnbarang);
@@ -222,22 +232,24 @@ public class FormBarang extends javax.swing.JInternalFrame {
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(panelTombol, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(panelCari, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(panelTabel, javax.swing.GroupLayout.DEFAULT_SIZE, 763, Short.MAX_VALUE)
+            .addComponent(panelTabel, javax.swing.GroupLayout.DEFAULT_SIZE, 1640, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(panelTombol, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panelTombol, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(panelCari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(panelTabel, javax.swing.GroupLayout.DEFAULT_SIZE, 399, Short.MAX_VALUE)
-                .addGap(1, 1, 1))
+                .addComponent(panelTabel, javax.swing.GroupLayout.DEFAULT_SIZE, 353, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel4);
@@ -364,11 +376,13 @@ public class FormBarang extends javax.swing.JInternalFrame {
     private javax.swing.JButton bedit;
     private javax.swing.JButton bhapus;
     private javax.swing.JButton bsimpan;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel panelCari;

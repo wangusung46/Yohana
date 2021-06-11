@@ -61,7 +61,7 @@ public class FormMenu extends javax.swing.JFrame {
 
         jPanelButton.setBackground(new java.awt.Color(0, 0, 0));
         jPanelButton.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jPanelButton.setLayout(new java.awt.GridLayout());
+        jPanelButton.setLayout(new java.awt.GridLayout(1, 0));
 
         buttonPelanggan.setText("Customer");
         buttonPelanggan.addActionListener(new java.awt.event.ActionListener() {
@@ -105,7 +105,7 @@ public class FormMenu extends javax.swing.JFrame {
 
         jPanel1.add(jPanelButton);
 
-        jPanel2.setLayout(new java.awt.GridLayout());
+        jPanel2.setLayout(new java.awt.GridLayout(1, 0));
 
         buttonBeliBarang.setText("Pemasukan Barang");
         buttonBeliBarang.addActionListener(new java.awt.event.ActionListener() {

@@ -104,6 +104,8 @@ public class FormSupplier extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jPanel2 = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         panelKodeSupplier = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
@@ -144,12 +146,21 @@ public class FormSupplier extends javax.swing.JInternalFrame {
 
         jPanel2.setBackground(new java.awt.Color(0, 51, 51));
 
+        jPanel5.setBackground(new java.awt.Color(102, 102, 255));
+        jPanel5.setForeground(new java.awt.Color(0, 0, 255));
+
+        jLabel1.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel1.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("FORM SUPPLIER");
+        jPanel5.add(jLabel1);
+
         jPanel4.setLayout(new java.awt.GridLayout(0, 2));
 
         panelKodeSupplier.setLayout(new java.awt.GridLayout(1, 0));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("Kode Supplier");
         panelKodeSupplier.add(jLabel8);
 
@@ -165,7 +176,6 @@ public class FormSupplier extends javax.swing.JInternalFrame {
         panelNamaSupplier.setLayout(new java.awt.GridLayout(1, 0));
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setText("Nama Supplier");
         panelNamaSupplier.add(jLabel9);
 
@@ -181,7 +191,6 @@ public class FormSupplier extends javax.swing.JInternalFrame {
         panelAlamat.setLayout(new java.awt.GridLayout(1, 0));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Alamat");
         panelAlamat.add(jLabel3);
         panelAlamat.add(textalamat);
@@ -191,7 +200,6 @@ public class FormSupplier extends javax.swing.JInternalFrame {
         panelTelepon.setLayout(new java.awt.GridLayout(1, 0));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Telepon");
         panelTelepon.add(jLabel4);
 
@@ -207,7 +215,6 @@ public class FormSupplier extends javax.swing.JInternalFrame {
         panelNorek.setLayout(new java.awt.GridLayout(1, 0));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Nomor Rekening");
         panelNorek.add(jLabel5);
 
@@ -223,7 +230,6 @@ public class FormSupplier extends javax.swing.JInternalFrame {
         panelBank.setLayout(new java.awt.GridLayout(1, 0));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Bank");
         panelBank.add(jLabel6);
 
@@ -239,7 +245,6 @@ public class FormSupplier extends javax.swing.JInternalFrame {
         panelEmail.setLayout(new java.awt.GridLayout(1, 0));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
         jLabel7.setText("Email");
         panelEmail.add(jLabel7);
 
@@ -323,21 +328,24 @@ public class FormSupplier extends javax.swing.JInternalFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(panelTombol, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(panelCari, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(panelTabel, javax.swing.GroupLayout.DEFAULT_SIZE, 765, Short.MAX_VALUE)
+            .addComponent(panelTabel, javax.swing.GroupLayout.DEFAULT_SIZE, 953, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(panelTombol, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panelTombol, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(panelCari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(panelTabel, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
+                .addComponent(panelTabel, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
                 .addGap(1, 1, 1))
         );
 
@@ -552,6 +560,7 @@ public class FormSupplier extends javax.swing.JInternalFrame {
     private javax.swing.JButton bedit;
     private javax.swing.JButton bhapus;
     private javax.swing.JButton bsimpan;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -563,6 +572,7 @@ public class FormSupplier extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel panelAlamat;
     private javax.swing.JPanel panelBank;
