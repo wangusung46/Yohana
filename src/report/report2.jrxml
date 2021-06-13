@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.3310000000000006"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="152"/>
 	<property name="ireport.y" value="0"/>
 	<queryString>
 		<![CDATA[SELECT
-     register.`username` AS register_username,
-     register.`nama` AS register_nama,
-     register.`password` AS register_password,
-     register.`jenis_kelamin` AS register_jenis_kelamin,
-     register.`no_telp` AS register_no_telp,
-     register.`alamat` AS register_alamat,
      supplier.`kodesupplier` AS supplier_kodesupplier,
      supplier.`namasupplier` AS supplier_namasupplier,
      supplier.`alamat` AS supplier_alamat,
@@ -19,15 +13,8 @@
      supplier.`bank` AS supplier_bank,
      supplier.`email` AS supplier_email
 FROM
-     `register` register,
      `supplier` supplier]]>
 	</queryString>
-	<field name="register_username" class="java.lang.String"/>
-	<field name="register_nama" class="java.lang.String"/>
-	<field name="register_password" class="java.lang.String"/>
-	<field name="register_jenis_kelamin" class="java.lang.String"/>
-	<field name="register_no_telp" class="java.lang.String"/>
-	<field name="register_alamat" class="java.lang.String"/>
 	<field name="supplier_kodesupplier" class="java.lang.String"/>
 	<field name="supplier_namasupplier" class="java.lang.String"/>
 	<field name="supplier_alamat" class="java.lang.String"/>
@@ -39,7 +26,7 @@ FROM
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="58" splitType="Stretch">
+		<band height="77" splitType="Stretch">
 			<staticText>
 				<reportElement x="2" y="0" width="553" height="39"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -48,15 +35,17 @@ FROM
 				<text><![CDATA[LAPORAN SUPPLIER
 PT MULIA JAYA TEXTILE]]></text>
 			</staticText>
-			<textField pattern="EEEEE dd MMMMM yyyy">
-				<reportElement x="352" y="38" width="200" height="20"/>
-				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[new SimpleDateFormat("EEEE, dd MMMM yyyy", new java.util.Locale("id")).format(new Date())]]></textFieldExpression>
-			</textField>
 			<image>
 				<reportElement x="0" y="0" width="164" height="58"/>
 				<imageExpression><![CDATA[new javax.swing.ImageIcon(getClass().getResource("/image/Mulia Jaya Textile.png")).getImage()]]></imageExpression>
 			</image>
+			<staticText>
+				<reportElement x="164" y="38" width="250" height="39"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Jalan Ciledug Raya Nomor 8 RT.08, RW. 5, Ulujami, Pesanggrahan, Jakarta.]]></text>
+			</staticText>
 		</band>
 	</title>
 	<columnHeader>
@@ -180,16 +169,26 @@ PT MULIA JAYA TEXTILE]]></text>
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="99" splitType="Stretch">
+		<band height="120" splitType="Stretch">
 			<staticText>
-				<reportElement x="452" y="0" width="100" height="20"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[Tanda Tangan]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="452" y="79" width="100" height="20"/>
+				<reportElement x="352" y="40" width="200" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[Manager Logistik]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="352" y="100" width="200" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Santoso]]></text>
+			</staticText>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="352" y="20" width="200" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("EEEE, dd MMMM yyyy", new java.util.Locale("id")).format(new Date())]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="352" y="0" width="200" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Jakarta]]></text>
 			</staticText>
 		</band>
 	</columnFooter>

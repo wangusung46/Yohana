@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.2100000000000009"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="51"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="awal" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
@@ -55,7 +55,7 @@ jualbarang.`tanggal` >= $P{awal} AND
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="63" splitType="Stretch">
+		<band height="82" splitType="Stretch">
 			<staticText>
 				<reportElement x="0" y="0" width="555" height="43"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -64,15 +64,17 @@ jualbarang.`tanggal` >= $P{awal} AND
 				<text><![CDATA[LAPORAN BARANG KELUAR
 PT MULIA JAYA TEXTILE]]></text>
 			</staticText>
-			<textField pattern="EEEEE dd MMMMM yyyy">
-				<reportElement x="353" y="43" width="200" height="20"/>
-				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[new SimpleDateFormat("EEEE, dd MMMM yyyy", new java.util.Locale("id")).format(new Date())]]></textFieldExpression>
-			</textField>
 			<image>
 				<reportElement x="0" y="0" width="164" height="63"/>
 				<imageExpression><![CDATA[new javax.swing.ImageIcon(getClass().getResource("/image/Mulia Jaya Textile.png")).getImage()]]></imageExpression>
 			</image>
+			<staticText>
+				<reportElement x="164" y="43" width="220" height="39"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Jalan Ciledug Raya Nomor 8 RT.08, RW. 5, Ulujami, Pesanggrahan, Jakarta.]]></text>
+			</staticText>
 		</band>
 	</title>
 	<columnHeader>
@@ -196,16 +198,26 @@ PT MULIA JAYA TEXTILE]]></text>
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="100" splitType="Stretch">
+		<band height="120" splitType="Stretch">
 			<staticText>
-				<reportElement x="453" y="0" width="100" height="20"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[Tanda Tangan]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="453" y="79" width="100" height="20"/>
+				<reportElement x="353" y="40" width="200" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[Manager Logistik]]></text>
+			</staticText>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="353" y="20" width="200" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("EEEE, dd MMMM yyyy", new java.util.Locale("id")).format(new Date())]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="353" y="0" width="200" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Jakarta]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="353" y="100" width="200" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Santoso]]></text>
 			</staticText>
 		</band>
 	</columnFooter>

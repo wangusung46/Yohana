@@ -159,6 +159,14 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonJualBarangActionPerformed"/>
               </Events>
             </Component>
+            <Component class="javax.swing.JButton" name="buttonStockBarang">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Stock Barang"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonStockBarangActionPerformed"/>
+              </Events>
+            </Component>
             <Component class="javax.swing.JButton" name="buttonLaporan">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Laporan"/>

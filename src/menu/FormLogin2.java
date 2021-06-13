@@ -2,6 +2,7 @@ package menu;
 
 import java.awt.HeadlessException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -23,13 +24,18 @@ public class FormLogin2 extends javax.swing.JFrame {
     /**
      * Creates new form LoginForm
      */
-    private Connection conn = Koneksi.getKoneksi();
+    private Connection connection = Koneksi.getKoneksi();
     private Statement stm;
     private ResultSet sql;
+    private FormMenu formMenu;
+    public String role;
 
     public FormLogin2() {
         initComponents();
         this.setLocationRelativeTo(null);// center form in the screen
+    }
+    public String FormMenu(String tes){
+        return tes;
     }
 
     /**
@@ -258,15 +264,25 @@ public class FormLogin2 extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "LENGKAPI DATA", "PT MULIA JAYA TEXTILE", JOptionPane.INFORMATION_MESSAGE);
         } else {
             try {
-                conn = Koneksi.getKoneksi();
-                stm = conn.createStatement();
+                connection = Koneksi.getKoneksi();
+                stm = connection.createStatement();
                 sql = stm.executeQuery("SELECT * FROM register WHERE username='" + userName.getText() + "' and password = '" + password.getText() + "'");
                 if (sql.next()) {
                     if (password.getText().equals(sql.getString("password"))) {
                         JOptionPane.showMessageDialog(null, "LOGIN BERHASIL", "PT MULIA JAYA TEXTILE", JOptionPane.INFORMATION_MESSAGE);
+                        try {
+                            String sql = "SELECT role FROM register WHERE username = '" + userName.getText() + "'";
+                            PreparedStatement pst = connection.prepareStatement(sql);
+                            ResultSet resultSet = pst.executeQuery(sql);
+                            while (resultSet.next()) {
+                                role = resultSet.getString(1);
+                            }
+                        } catch (SQLException e) {
+                            JOptionPane.showMessageDialog(null, e);
+                        }
                         this.dispose();
-                        FormMenu fb = new FormMenu();
-                        fb.setVisible(true);
+                        formMenu = new FormMenu(role);
+                        formMenu.setVisible(true);
                         this.setVisible(false);
                     } else {
                         JOptionPane.showMessageDialog(null, "USERNAME DAN PASSWORD SALAH", "PT MULIA JAYA TEXTILE", JOptionPane.INFORMATION_MESSAGE);

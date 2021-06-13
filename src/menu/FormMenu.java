@@ -1,17 +1,73 @@
 package menu;
 
 import barang.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import kategori.*;
 import pelanggan.*;
 import satuan.*;
 import supplier.*;
 import javax.swing.JOptionPane;
+import koneksi.Koneksi;
 
 public class FormMenu extends javax.swing.JFrame {
+
+    private Connection connection = Koneksi.getKoneksi();
+    public String role;
 
     public FormMenu() {
         initComponents();
         setExtendedState(MAXIMIZED_BOTH);
+        System.out.println(role);
+//        buttonBarang.setEnabled(false);
+//        buttonBeliBarang.setEnabled(false);
+//        buttonJualBarang.setEnabled(false);
+//        buttonKategori.setEnabled(false);
+//        buttonLaporan.setEnabled(false);
+//        buttonPelanggan.setEnabled(false);
+//        buttonSatuan.setEnabled(false);
+//        buttonSupplier.setEnabled(false);
+    }
+
+    public FormMenu(String role) {
+        initComponents();
+        setExtendedState(MAXIMIZED_BOTH);
+        System.out.println(role);
+        buttonBarang.setEnabled(false);
+        buttonBeliBarang.setEnabled(false);
+        buttonJualBarang.setEnabled(false);
+        buttonStockBarang.setEnabled(false);
+        buttonKategori.setEnabled(false);
+        buttonLaporan.setEnabled(false);
+        buttonPelanggan.setEnabled(false);
+        buttonSatuan.setEnabled(false);
+        buttonSupplier.setEnabled(false);
+        this.role = role;
+        role();
+    }
+
+    private void role() {
+        if (role.equals("Admin")) {
+            buttonBarang.setEnabled(true);
+            buttonBeliBarang.setEnabled(true);
+            buttonJualBarang.setEnabled(true);
+            buttonStockBarang.setEnabled(true);
+            buttonKategori.setEnabled(true);
+            buttonLaporan.setEnabled(true);
+            buttonPelanggan.setEnabled(true);
+            buttonSatuan.setEnabled(true);
+            buttonSupplier.setEnabled(true);
+        } else if (role.equals("Divisi Gudang")) {
+            buttonBarang.setEnabled(true);
+            buttonBeliBarang.setEnabled(true);
+            buttonStockBarang.setEnabled(true);
+        } else if (role.equals("Manager")) {
+            buttonLaporan.setEnabled(true);
+        } else{
+            buttonLaporan.setEnabled(true);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -31,6 +87,7 @@ public class FormMenu extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         buttonBeliBarang = new javax.swing.JButton();
         buttonJualBarang = new javax.swing.JButton();
+        buttonStockBarang = new javax.swing.JButton();
         buttonLaporan = new javax.swing.JButton();
         buttonKeluar = new javax.swing.JButton();
         jDesktopPane1 = new javax.swing.JDesktopPane();
@@ -123,6 +180,14 @@ public class FormMenu extends javax.swing.JFrame {
         });
         jPanel2.add(buttonJualBarang);
 
+        buttonStockBarang.setText("Stock Barang");
+        buttonStockBarang.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonStockBarangActionPerformed(evt);
+            }
+        });
+        jPanel2.add(buttonStockBarang);
+
         buttonLaporan.setText("Laporan");
         buttonLaporan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -182,6 +247,8 @@ public class FormMenu extends javax.swing.JFrame {
 
         if (JOptionPane.showConfirmDialog(null, "Yakin ingin keluar?", "KHANZA App", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
             this.setVisible(false);
+            FormLogin2 formLogin2 = new FormLogin2();
+            formLogin2.setVisible(true);
         }
     }//GEN-LAST:event_buttonKeluarActionPerformed
 
@@ -232,6 +299,14 @@ public class FormMenu extends javax.swing.JFrame {
         jDesktopPane1.add(fb);
         fb.setVisible(true);
     }//GEN-LAST:event_buttonBarangActionPerformed
+
+    private void buttonStockBarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonStockBarangActionPerformed
+        jDesktopPane1.removeAll();
+        jDesktopPane1.updateUI();
+        FormStockBarang fb = new FormStockBarang();
+        jDesktopPane1.add(fb);
+        fb.setVisible(true);
+    }//GEN-LAST:event_buttonStockBarangActionPerformed
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(() -> {
             new FormMenu().setVisible(true);
@@ -247,6 +322,7 @@ public class FormMenu extends javax.swing.JFrame {
     private javax.swing.JButton buttonLaporan;
     private javax.swing.JButton buttonPelanggan;
     private javax.swing.JButton buttonSatuan;
+    private javax.swing.JButton buttonStockBarang;
     private javax.swing.JButton buttonSupplier;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;

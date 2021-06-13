@@ -18,9 +18,11 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
         initComponents();
         textkbeli.setEnabled(false);
         texttotal.setEnabled(false);
+//        bsimpan.setEnabled(false);
         defaultTableModel = new DefaultTableModel();
         tableinput.setModel(defaultTableModel);
         defaultTableModel.addColumn("Kode Beli");
+        defaultTableModel.addColumn("Kode Stock");
         defaultTableModel.addColumn("Nama Supplier");
         defaultTableModel.addColumn("Kategori Barang");
         defaultTableModel.addColumn("Nama Barang");
@@ -53,7 +55,6 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
     }
 
     private void loadData() {
-        bsimpan.setEnabled(true);
         bhapus.setEnabled(false);
         bedit.setEnabled(false);
         defaultTableModel.getDataVector().removeAllElements();
@@ -69,27 +70,29 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
             while (resultSet.next()) {
                 Object[] objects = new Object[10];
                 objects[0] = resultSet.getString("kodebeli");
+                
+                objects[1] = resultSet.getString("kodestock");
 
                 resultSetRelation = statementRelation.executeQuery("SELECT namasupplier FROM supplier WHERE kodesupplier = '" + resultSet.getString("kodesupplier") + "'");
                 resultSetRelation.next();
-                objects[1] = resultSetRelation.getString("namasupplier");
+                objects[2] = resultSetRelation.getString("namasupplier");
 
                 resultSetRelation = statementRelation.executeQuery("SELECT namakategori FROM kategori WHERE kodekategori = '" + resultSet.getString("kodekategori") + "'");
                 resultSetRelation.next();
-                objects[2] = resultSetRelation.getString("namakategori");
+                objects[3] = resultSetRelation.getString("namakategori");
 
                 resultSetRelation = statementRelation.executeQuery("SELECT namabarang FROM barang WHERE kodebarang = '" + resultSet.getString("kodebarang") + "'");
                 resultSetRelation.next();
-                objects[3] = resultSetRelation.getString("namabarang");
+                objects[4] = resultSetRelation.getString("namabarang");
 
                 resultSetRelation = statementRelation.executeQuery("SELECT namasatuan FROM satuan WHERE kodesatuan = '" + resultSet.getString("kodesatuan") + "'");
                 resultSetRelation.next();
-                objects[4] = resultSetRelation.getString("namasatuan");
+                objects[5] = resultSetRelation.getString("namasatuan");
 
-                objects[5] = resultSet.getString("jumlahbarang");
-                objects[6] = resultSet.getString("hargabeli");
-                objects[7] = resultSet.getString("total");
-                objects[8] = resultSet.getString("tanggal");
+                objects[6] = resultSet.getString("jumlahbarang");
+                objects[7] = resultSet.getString("hargabeli");
+                objects[8] = resultSet.getString("total");
+                objects[9] = resultSet.getString("tanggal");
                 defaultTableModel.addRow(objects);
             }
 
@@ -695,24 +698,24 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(null, e);
             }
 
-//            try {
-//                Connection c = Koneksi.getKoneksi();
-//                String sql = "INSERT INTO stock VALUES (?, ?, ?, ?, ?, ?, ?)";
-//                PreparedStatement pst;
-//                pst = c.prepareStatement(sql);
-//                pst.setString(1, tkodestock);
-//                pst.setString(2, tkategori);
-//                pst.setString(3, tkodebarang);
-//                pst.setString(4, tsatuan);
-//                pst.setString(5, tjumlah);
-//                pst.setString(6, thargabeli);
-//                pst.setString(7, ttotal);
-//                pst.executeUpdate();
-//                pst.close();
-//                JOptionPane.showMessageDialog(null, "DATA BERHASIL DISIMPAN", "PT MULIA JAYA TEXTILE", JOptionPane.INFORMATION_MESSAGE);
-//            } catch (SQLException e) {
-//                JOptionPane.showMessageDialog(null, e);
-//            } 
+            try {
+                Connection c = Koneksi.getKoneksi();
+                String sql = "INSERT INTO stock VALUES (?, ?, ?, ?, ?, ?, ?)";
+                PreparedStatement pst;
+                pst = c.prepareStatement(sql);
+                pst.setString(1, tkodestock);
+                pst.setString(2, tkategori);
+                pst.setString(3, tkodebarang);
+                pst.setString(4, tsatuan);
+                pst.setString(5, tjumlah);
+                pst.setString(6, thargabeli);
+                pst.setString(7, ttotal);
+                pst.executeUpdate();
+                pst.close();
+                JOptionPane.showMessageDialog(null, "DATA BERHASIL DISIMPAN", "PT MULIA JAYA TEXTILE", JOptionPane.INFORMATION_MESSAGE);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, e);
+            } 
             loadData();
             kodeBeli();
             kosong();
@@ -731,18 +734,19 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
         String tablekodebeli = (String) defaultTableModel.getValueAt(i, 0);
         textkbeli.setText(tablekodebeli);
 
-//        String tablekodestock = (String) defaultTableModel.getValueAt(i, 1);
-//        stock = tablekodestock;
-        String tablesupplier = (String) defaultTableModel.getValueAt(i, 1);
+        String tablekodestock = (String) defaultTableModel.getValueAt(i, 1);
+        stock = tablekodestock;
+        
+        String tablesupplier = (String) defaultTableModel.getValueAt(i, 2);
         cksupplier.setSelectedItem(tablesupplier);
 
-        String tablekategori = (String) defaultTableModel.getValueAt(i, 2);
+        String tablekategori = (String) defaultTableModel.getValueAt(i, 3);
         ckkategori.setSelectedItem(tablekategori);
 
-        String tablenamabarang = (String) defaultTableModel.getValueAt(i, 3);
+        String tablenamabarang = (String) defaultTableModel.getValueAt(i, 4);
         cksatuan.setSelectedItem(tablenamabarang);
 
-        String tablesatuan = (String) defaultTableModel.getValueAt(i, 4);
+        String tablesatuan = (String) defaultTableModel.getValueAt(i, 5);
         ckkategori.setSelectedItem(tablesatuan);
 
     }//GEN-LAST:event_tableinputMouseClicked
@@ -754,15 +758,15 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
         } catch (HeadlessException | SQLException e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
-//        try {
-//            String sql = "DELETE FROM stock WHERE kodestock='" + stock + "'";
-//            connection = (Connection) Koneksi.getKoneksi();
-//            PreparedStatement pst = connection.prepareStatement(sql);
-//            pst.execute();
-//            JOptionPane.showMessageDialog(null, "DATA BERHASIL DIHAPUS", "PT MULIA JAYA TEXTILE", JOptionPane.INFORMATION_MESSAGE);
-//        } catch (HeadlessException | SQLException e) {
-//            JOptionPane.showMessageDialog(this, e.getMessage());
-//        }
+        try {
+            String sql = "DELETE FROM stock WHERE kodestock='" + stock + "'";
+            connection = (Connection) Koneksi.getKoneksi();
+            PreparedStatement pst = connection.prepareStatement(sql);
+            pst.execute();
+            JOptionPane.showMessageDialog(null, "DATA BERHASIL DIHAPUS", "PT MULIA JAYA TEXTILE", JOptionPane.INFORMATION_MESSAGE);
+        } catch (HeadlessException | SQLException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
         loadData();
         kodeBeli();
         kosong();
@@ -792,23 +796,23 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(null, "Data Gagal Diubah" + e);
             }
-//            try {
-//                connection = Koneksi.getKoneksi();
-//                String sql = "UPDATE stock SET kodekategori=?, kodebarang=?, kodesatuan=?, jumlahbarang=?, hargabeli=?, total=? WHERE kodestock='" + stock + "'";
-//                PreparedStatement pst;
-//                pst = connection.prepareStatement(sql);
-//                pst.setString(1, ckkategori.getSelectedItem().toString().substring(0, 6));
-//                pst.setString(2, ckbarang.getSelectedItem().toString().substring(0, 6));
-//                pst.setString(3, cksatuan.getSelectedItem().toString().substring(0, 6));
-//                pst.setString(4, textjumlah.getText());
-//                pst.setString(5, texthbeli.getText());
-//                pst.setString(6, texttotal.getText());
-//                pst.executeUpdate();
-//                JOptionPane.showMessageDialog(null, "DATA BERHASIL DIRUBAH", "PT MULIA JAYA TEXTILE", JOptionPane.INFORMATION_MESSAGE);
-//                textkbeli.requestFocus();
-//            } catch (SQLException e) {
-//                JOptionPane.showMessageDialog(this, e.getMessage());
-//            } 
+            try {
+                connection = Koneksi.getKoneksi();
+                String sql = "UPDATE stock SET kodekategori=?, kodebarang=?, kodesatuan=?, jumlahbarang=?, hargabeli=?, total=? WHERE kodestock='" + stock + "'";
+                PreparedStatement pst;
+                pst = connection.prepareStatement(sql);
+                pst.setString(1, ckkategori.getSelectedItem().toString().substring(0, 6));
+                pst.setString(2, ckbarang.getSelectedItem().toString().substring(0, 6));
+                pst.setString(3, cksatuan.getSelectedItem().toString().substring(0, 6));
+                pst.setString(4, textjumlah.getText());
+                pst.setString(5, texthbeli.getText());
+                pst.setString(6, texttotal.getText());
+                pst.executeUpdate();
+                JOptionPane.showMessageDialog(null, "DATA BERHASIL DIRUBAH", "PT MULIA JAYA TEXTILE", JOptionPane.INFORMATION_MESSAGE);
+                textkbeli.requestFocus();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, e.getMessage());
+            } 
             loadData();
             kodeBeli();
             kosong();
@@ -878,6 +882,9 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
         tot = hb * jum;
         String total = String.valueOf(tot);
         texttotal.setText(total);
+//        if(textjumlah.getText() != null && texthbeli.getText() != null){
+//            bsimpan.setEnabled(true);
+//        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void ckkategoriItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_ckkategoriItemStateChanged

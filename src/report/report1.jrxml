@@ -25,19 +25,12 @@
      jualbarang.`kembali` AS jualbarang_kembali,
      jualbarang.`untung` AS jualbarang_untung,
      jualbarang.`tanggal` AS jualbarang_tanggal,
-     register.`username` AS register_username,
-     register.`nama` AS register_nama,
-     register.`password` AS register_password,
-     register.`jenis_kelamin` AS register_jenis_kelamin,
-     register.`no_telp` AS register_no_telp,
-     register.`alamat` AS register_alamat,
      barang.`kodebarang` AS barang_kodebarang,
      barang.`namabarang` AS barang_namabarang,
      satuan.`kodesatuan` AS satuan_kodesatuan,
      satuan.`namasatuan` AS satuan_namasatuan
 FROM
      `jualbarang` jualbarang,
-     `register` register,
      `barang` barang,
      `satuan` satuan
 WHERE
@@ -56,12 +49,6 @@ WHERE
 	<field name="jualbarang_kembali" class="java.lang.Integer"/>
 	<field name="jualbarang_untung" class="java.lang.Integer"/>
 	<field name="jualbarang_tanggal" class="java.sql.Date"/>
-	<field name="register_username" class="java.lang.String"/>
-	<field name="register_nama" class="java.lang.String"/>
-	<field name="register_password" class="java.lang.String"/>
-	<field name="register_jenis_kelamin" class="java.lang.String"/>
-	<field name="register_no_telp" class="java.lang.String"/>
-	<field name="register_alamat" class="java.lang.String"/>
 	<field name="barang_kodebarang" class="java.lang.String"/>
 	<field name="barang_namabarang" class="java.lang.String"/>
 	<field name="satuan_kodesatuan" class="java.lang.String"/>
@@ -81,11 +68,6 @@ WHERE
 				</textElement>
 				<text><![CDATA[PT MULIA JAYA TEXTILE]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="218" y="39" width="369" height="20"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{register_no_telp}]]></textFieldExpression>
-			</textField>
 			<textField pattern="EEEEE dd MMMMM yyyy">
 				<reportElement x="587" y="39" width="196" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
@@ -95,6 +77,13 @@ WHERE
 				<reportElement x="36" y="4" width="164" height="75"/>
 				<imageExpression><![CDATA[new javax.swing.ImageIcon(getClass().getResource("/image/Mulia Jaya Textile.png")).getImage()]]></imageExpression>
 			</image>
+			<staticText>
+				<reportElement x="275" y="40" width="250" height="39"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Jalan Ciledug Raya Nomor 8 RT.08, RW. 5, Ulujami, Pesanggrahan, Jakarta.]]></text>
+			</staticText>
 		</band>
 	</title>
 	<pageHeader>
