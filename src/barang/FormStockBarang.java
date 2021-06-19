@@ -8,56 +8,56 @@ import javax.swing.table.DefaultTableModel;
 
 public class FormStockBarang extends javax.swing.JInternalFrame {
 
-    private final DefaultTableModel model;
-    private Connection conn = Koneksi.getKoneksi();
-    private ResultSet rs;
-    private PreparedStatement pst;
-    private Statement st;
+    private final DefaultTableModel defaultTableModel;
+    private Connection connection = Koneksi.getKoneksi();
+    private ResultSet resultSet;
+    private Statement statement;
     private String sql;
-    private double tot, hb, jum;
 
     public FormStockBarang() {
         initComponents();
-//        textkstock.setEnabled(false);
-//        texttotal.setEnabled(false);
-        model = new DefaultTableModel();
-        tableinput.setModel(model);
-        model.addColumn("Kode Stock");
-        model.addColumn("Kategori Barang");
-        model.addColumn("Nama Barang");
-        model.addColumn("Satuan Barang");
-        model.addColumn("Jumlah Barang");
-        model.addColumn("Harga Beli");
-        model.addColumn("Total");
+        defaultTableModel = new DefaultTableModel();
+        tableinput.setModel(defaultTableModel);
+        defaultTableModel.addColumn("Kode Stock");
+        defaultTableModel.addColumn("Kategori Barang");
+        defaultTableModel.addColumn("Nama Barang");
+        defaultTableModel.addColumn("Satuan Barang");
+        defaultTableModel.addColumn("Jumlah Barang");
         loadData();
     }
 
     private void loadData() {
-//        bhapus.setEnabled(false);
-//        bedit.setEnabled(false);
-        model.getDataVector().removeAllElements();
-        model.fireTableDataChanged();
+        defaultTableModel.getDataVector().removeAllElements();
+        defaultTableModel.fireTableDataChanged();
 
         try {
-            conn = Koneksi.getKoneksi();
-            st = conn.createStatement();
+            String sql = "SELECT * FROM stock";
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            
+            Statement statementRelation = connection.createStatement();
+            ResultSet resultSetRelation;
+            
+            while (resultSet.next()) {
+                Object[] objects = new Object[7];
+                objects[0] = resultSet.getString("kodestock");
+                resultSetRelation = statementRelation.executeQuery("SELECT namakategori FROM kategori WHERE kodekategori = '" + resultSet.getString("kodekategori") + "'");
+                resultSetRelation.next();
+                objects[1] = resultSetRelation.getString("namakategori");
 
-            sql = "SELECT * FROM stock";
-            rs = st.executeQuery(sql);
-            while (rs.next()) {
-                Object[] o = new Object[7];
-                o[0] = rs.getString("kodestock");
-                o[1] = rs.getString("kodekategori");
-                o[2] = rs.getString("kodebarang");
-                o[3] = rs.getString("kodesatuan");
-                o[4] = rs.getString("jumlahbarang");
-                o[5] = rs.getString("hargabeli");
-                o[6] = rs.getString("total");
+                resultSetRelation = statementRelation.executeQuery("SELECT namabarang FROM barang WHERE kodebarang = '" + resultSet.getString("kodebarang") + "'");
+                resultSetRelation.next();
+                objects[2] = resultSetRelation.getString("namabarang");
 
-                model.addRow(o);
+                resultSetRelation = statementRelation.executeQuery("SELECT namasatuan FROM satuan WHERE kodesatuan = '" + resultSet.getString("kodesatuan") + "'");
+                resultSetRelation.next();
+                objects[3] = resultSetRelation.getString("namasatuan");
+                objects[4] = resultSet.getString("jumlahbarang");
+
+                defaultTableModel.addRow(objects);
             }
-            rs.close();
-            st.close();
+            resultSet.close();
+            statement.close();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Data Gagal Disimpan " + e);
         }
@@ -151,37 +151,33 @@ public class FormStockBarang extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void textcariKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textcariKeyReleased
-        model.getDataVector().removeAllElements();
-        model.fireTableDataChanged();
+        defaultTableModel.getDataVector().removeAllElements();
+        defaultTableModel.fireTableDataChanged();
 
         try {
-            conn = Koneksi.getKoneksi();
-            st = conn.createStatement();
+            connection = Koneksi.getKoneksi();
+            statement = connection.createStatement();
 
             sql = "SELECT * FROM stock WHERE "
                     + "kodestock LIKE '%" + textcari.getText()
-                    + "%' OR namakategori LIKE'%" + textcari.getText()
-                    + "%' OR namabarang like'" + textcari.getText()
-                    + "%' OR namasatuan like'%" + textcari.getText()
-                    + "%' OR jumlah like'%" + textcari.getText()
-                    + "%' OR hargabeli like'%" + textcari.getText()
-                    + "%' OR total like'%" + textcari.getText() + "%'";
-            rs = st.executeQuery(sql);
+                    + "%' OR kodekategori LIKE'%" + textcari.getText()
+                    + "%' OR kodebarang like'" + textcari.getText()
+                    + "%' OR kodesatuan like'%" + textcari.getText()
+                    + "%' OR jumlah like'%" + textcari.getText() + "%'";
+            resultSet = statement.executeQuery(sql);
 
-            while (rs.next()) {
-                Object[] o = new Object[7];
-                o[0] = rs.getString("kodestock");
-                o[1] = rs.getString("namakategori");
-                o[2] = rs.getString("namabarang");
-                o[3] = rs.getString("namasatuan");
-                o[4] = rs.getString("jumlahbarang");
-                o[5] = rs.getString("hargabeli");
-                o[6] = rs.getString("total");
+            while (resultSet.next()) {
+                Object[] o = new Object[5];
+                o[0] = resultSet.getString("kodestock");
+                o[1] = resultSet.getString("kodekategori");
+                o[2] = resultSet.getString("kodebarang");
+                o[3] = resultSet.getString("kodesatuan");
+                o[4] = resultSet.getString("jumlahbarang");
 
-                model.addRow(o);
+                defaultTableModel.addRow(o);
             }
-            rs.close();
-            st.close();
+            resultSet.close();
+            statement.close();
         } catch (SQLException e) {
             System.out.println("Terjadi Error");
         }

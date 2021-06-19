@@ -204,9 +204,9 @@
                     <Property name="text" type="java.lang.String" value="CARI"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="textcari1">
+                <Component class="javax.swing.JTextField" name="textcari">
                   <Events>
-                    <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="textcari1KeyReleased"/>
+                    <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="textcariKeyReleased"/>
                   </Events>
                 </Component>
               </SubComponents>

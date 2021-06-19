@@ -104,7 +104,7 @@ public class FormSatuan extends javax.swing.JInternalFrame {
         panelCari = new javax.swing.JPanel();
         jPanel11 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        textcari1 = new javax.swing.JTextField();
+        textcari = new javax.swing.JTextField();
         panelTabel = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tableinput = new javax.swing.JTable();
@@ -192,12 +192,12 @@ public class FormSatuan extends javax.swing.JInternalFrame {
         jLabel3.setText("CARI");
         jPanel11.add(jLabel3);
 
-        textcari1.addKeyListener(new java.awt.event.KeyAdapter() {
+        textcari.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                textcari1KeyReleased(evt);
+                textcariKeyReleased(evt);
             }
         });
-        jPanel11.add(textcari1);
+        jPanel11.add(textcari);
 
         panelCari.add(jPanel11);
 
@@ -338,9 +338,32 @@ public class FormSatuan extends javax.swing.JInternalFrame {
         textnsatuan.setText(tablenamasupplier);
     }//GEN-LAST:event_tableinputMouseClicked
 
-    private void textcari1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textcari1KeyReleased
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textcari1KeyReleased
+    private void textcariKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textcariKeyReleased
+        model.getDataVector().removeAllElements();
+        model.fireTableDataChanged();
+
+        try {
+            conn = Koneksi.getKoneksi();
+            st = conn.createStatement();
+
+            sql = "SELECT * FROM satuan WHERE "
+                    + "kodesatuan LIKE '%" + textcari.getText()
+                    + "%' OR namasatuan LIKE'%" + textcari.getText() + "%'";
+            rs = st.executeQuery(sql);
+
+            while (rs.next()) {
+                Object[] o = new Object[2];
+                o[0] = rs.getString("kodesatuan");
+                o[1] = rs.getString("namasatuan");
+
+                model.addRow(o);
+            }
+            rs.close();
+            st.close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_textcariKeyReleased
 
     private void textksatuanKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textksatuanKeyTyped
         // TODO add your handling code here:
@@ -371,7 +394,7 @@ public class FormSatuan extends javax.swing.JInternalFrame {
     private javax.swing.JPanel panelTabel;
     private javax.swing.JPanel panelTombol;
     private javax.swing.JTable tableinput;
-    private javax.swing.JTextField textcari1;
+    private javax.swing.JTextField textcari;
     private javax.swing.JTextField textksatuan;
     private javax.swing.JTextField textnsatuan;
     // End of variables declaration//GEN-END:variables

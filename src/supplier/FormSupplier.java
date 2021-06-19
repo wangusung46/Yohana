@@ -508,8 +508,8 @@ public class FormSupplier extends javax.swing.JInternalFrame {
             conn = Koneksi.getKoneksi();
             st = conn.createStatement();
 
-            sql = "SELECT * FROM barang WHERE "
-                    + "kodebarang LIKE '%" + textcari.getText()
+            sql = "SELECT * FROM supplier WHERE "
+                    + "kodesupplier LIKE '%" + textcari.getText()
                     + "%' OR namasupplier LIKE'%" + textcari.getText()
                     + "%' OR alamat like'" + textcari.getText()
                     + "%' OR nomortelepon LIKE'%" + textcari.getText()

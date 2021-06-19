@@ -26,8 +26,8 @@ public class FormPelanggan extends javax.swing.JInternalFrame {
         model.addColumn("Kede Pelanggan");
         model.addColumn("Nama Pelanggan");
         model.addColumn("Jenis Kelamin");
-        model.addColumn("Alamat");
         model.addColumn("Nomor Telepon");
+        model.addColumn("Alamat");
         loadData();
     }
 

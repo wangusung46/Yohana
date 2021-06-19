@@ -12,7 +12,7 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
     private final DefaultTableModel defaultTableModel;
     private Connection connection = Koneksi.getKoneksi();
     private double tot, hb, jum;
-    private String stock, kategori, satuan, supplier, barang;
+    private String stock;
 
     public FormBarangMasuk() {
         initComponents();
@@ -38,6 +38,7 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
         tampilSatuan();
         kodeBeli();
         kodeStock();
+        kosong();
     }
 
     private void FilterHuruf(KeyEvent a) {
@@ -56,7 +57,7 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
 
     private void loadData() {
         bhapus.setEnabled(false);
-        bedit.setEnabled(false);
+//        bedit.setEnabled(false);
         defaultTableModel.getDataVector().removeAllElements();
         defaultTableModel.fireTableDataChanged();
         try {
@@ -67,10 +68,11 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
             Statement statementRelation = connection.createStatement();
             ResultSet resultSetRelation;
 
+            Object[] objects = new Object[10];
             while (resultSet.next()) {
-                Object[] objects = new Object[10];
+
                 objects[0] = resultSet.getString("kodebeli");
-                
+
                 objects[1] = resultSet.getString("kodestock");
 
                 resultSetRelation = statementRelation.executeQuery("SELECT namasupplier FROM supplier WHERE kodesupplier = '" + resultSet.getString("kodesupplier") + "'");
@@ -104,13 +106,12 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
     private void tampilSupplier() {
         try {
             String sql = "SELECT * FROM supplier ORDER by kodesupplier";
-            PreparedStatement pst = connection.prepareStatement(sql);
-            try (ResultSet resultSet = pst.executeQuery(sql)) {
-                System.out.println(sql);
-                while (resultSet.next()) {
-                    cksupplier.addItem(resultSet.getString("kodesupplier") + " " + resultSet.getString("namasupplier"));
-                }
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery(sql);
+            while (resultSet.next()) {
+                cksupplier.addItem(resultSet.getString("kodesupplier") + " " + resultSet.getString("namasupplier"));
             }
+
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e);
         }
@@ -119,12 +120,12 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
     private void tampilKategori() {
         try {
             String sql = "SELECT * FROM kategori ORDER by kodekategori";
-            PreparedStatement pst = connection.prepareStatement(sql);
-            try (ResultSet resultSet = pst.executeQuery(sql)) {
-                while (resultSet.next()) {
-                    ckkategori.addItem(resultSet.getString(1) + " " + resultSet.getString(2));
-                }
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery(sql);
+            while (resultSet.next()) {
+                ckkategori.addItem(resultSet.getString(1) + " " + resultSet.getString(2));
             }
+
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e);
         }
@@ -133,12 +134,12 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
     private void tampilBarang() {
         try {
             String sql = "SELECT * FROM barang ORDER by kodebarang";
-            Statement st = connection.createStatement();
-            try (ResultSet resultSet = st.executeQuery(sql)) {
-                while (resultSet.next()) {
-                    ckbarang.addItem(resultSet.getString(1) + " " + resultSet.getString(2));
-                }
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                ckbarang.addItem(resultSet.getString(1) + " " + resultSet.getString(2));
             }
+
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e);
         }
@@ -147,12 +148,12 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
     private void tampilSatuan() {
         try {
             String sql = "SELECT * FROM satuan ORDER by kodesatuan";
-            Statement st = connection.createStatement();
-            try (ResultSet resultSet = st.executeQuery(sql)) {
-                while (resultSet.next()) {
-                    cksatuan.addItem(resultSet.getString(1) + " " + resultSet.getString(2));
-                }
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                cksatuan.addItem(resultSet.getString(1) + " " + resultSet.getString(2));
             }
+
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e);
         }
@@ -161,14 +162,13 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
     private void kodeBeli() {
         try {
             connection = Koneksi.getKoneksi();
-            Statement st = connection.createStatement();
+            Statement statement = connection.createStatement();
 
             String sql = "SELECT * FROM belibarang ORDER by kodebeli DESC";
-            ResultSet resultSet = st.executeQuery(sql);
+            ResultSet resultSet = statement.executeQuery(sql);
 
             if (resultSet.next()) {
                 String kbar = resultSet.getString("kodebeli").substring(1);
-                System.out.println(kbar);
                 String AN = "" + (Integer.parseInt(kbar) + 1);
                 String Nol = "";
                 if (AN.length() == 1) {
@@ -183,11 +183,6 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
                     Nol = "";
                 }
                 kbar = "F" + Nol + AN;
-                String rsupplier = supplier;
-                System.out.println(rsupplier);
-                String rkategori = kategori;
-                String rbarang = barang;
-                String rsatuan = satuan;
                 try {
                     textkbeli.setText(kbar);
                 } catch (Exception e) {
@@ -195,10 +190,6 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
                 }
             } else {
                 String kbar = "F00001";
-                String rsupplier = supplier;
-                String rkategori = kategori;
-                String rbarang = barang;
-                String rsatuan = satuan;
                 try {
                     textkbeli.setText(kbar);
                 } catch (Exception e) {
@@ -213,14 +204,14 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
     private void kodeStock() {
         try {
             connection = Koneksi.getKoneksi();
-            Statement st = connection.createStatement();
-            String sql = "SELECT * FROM stock ORDER BY kodestock DESC";
-            ResultSet resultSet = st.executeQuery(sql);
-            if (resultSet.next()) {
-                String kbar = resultSet.getString("kodestock").substring(1);
+            String sqlKodeStock = "SELECT * FROM belibarang ORDER by kodestock DESC";
+            Statement statement = connection.createStatement();
+            ResultSet resultSetKodeStock = statement.executeQuery(sqlKodeStock);
+
+            if (resultSetKodeStock.next()) {
+                String kbar = resultSetKodeStock.getString("kodestock").substring(1);
                 String AN = "" + (Integer.parseInt(kbar) + 1);
                 String Nol = "";
-                System.out.println(kbar + " " + AN + " " + Nol);
                 switch (AN.length()) {
                     case 1:
                         Nol = "0000";
@@ -244,67 +235,31 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
             } else {
                 stock = "G00001";
             }
+
+            String sqlExist = "SELECT * FROM belibarang WHERE "
+                    + "kodekategori = '" + ckkategori.getSelectedItem().toString().substring(0, 6) + "' AND "
+                    + "kodebarang = '" + ckbarang.getSelectedItem().toString().substring(0, 6) + "' AND "
+                    + "kodesatuan = '" + cksatuan.getSelectedItem().toString().substring(0, 6) + "' ";
+            System.out.println(sqlExist);
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlExist);
+            ResultSet resultSet = preparedStatement.executeQuery(sqlExist);
+            String sama1 = "", sama2 = "", sama3 = "", sama4 = "";
+            while (resultSet.next()) {
+                sama1 = resultSet.getString("kodekategori");
+                sama2 = resultSet.getString("kodebarang");
+                sama3 = resultSet.getString("kodesatuan");
+                sama4 = resultSet.getString("kodestock");
+            }
+            preparedStatement.close();
+            resultSet.close();
+
+            if (ckkategori.getSelectedItem().toString().substring(0, 6).equals(sama1)
+                    && ckbarang.getSelectedItem().toString().substring(0, 6).equals(sama2)
+                    && cksatuan.getSelectedItem().toString().substring(0, 6).equals(sama3)) {
+                stock = sama4;
+            }
+
         } catch (NumberFormatException | SQLException e) {
-            JOptionPane.showMessageDialog(null, e);
-        }
-    }
-
-    private void tampilKodeSupplier() {
-        try {
-            String rsupplier = cksupplier.getSelectedItem().toString().substring(0, 6);
-            System.out.println(rsupplier);
-            String sql = "SELECT * FROM supplier Where kodesupplier LIKE '" + rsupplier + "' ORDER BY kodesupplier ASC";
-            PreparedStatement pst = connection.prepareStatement(sql);
-            ResultSet resultSet = pst.executeQuery(sql);
-
-            resultSet.absolute(1);
-            supplier = resultSet.getString("kodesupplier");
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e);
-        }
-    }
-
-    private void tampilKodeKategori() {
-        try {
-            String rkategori = ckkategori.getSelectedItem().toString().substring(0, 6);
-            System.out.println(rkategori);
-            String sql = "SELECT * FROM kategori WHERE kodekategori LIKE '" + rkategori + "' ORDER BY kodekategori ASC";
-            PreparedStatement pst = connection.prepareStatement(sql);
-            ResultSet resultSet = pst.executeQuery(sql);
-            resultSet.absolute(1);
-            rkategori = resultSet.getString("kodekategori");
-            kategori = rkategori;
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e);
-        }
-    }
-
-    private void tampilKodeBarang() {
-        try {
-            String rbarang = ckbarang.getSelectedItem().toString().substring(0, 6);
-            System.out.println(rbarang);
-            String sql = "SELECT * FROM barang WHERE kodebarang LIKE '" + rbarang + "' ORDER BY kodebarang ASC";
-            PreparedStatement pst = connection.prepareStatement(sql);
-            ResultSet resultSet = pst.executeQuery(sql);
-            resultSet.absolute(1);
-            rbarang = resultSet.getString("kodebarang");
-            barang = rbarang;
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e);
-        }
-    }
-
-    private void tampilKodeSatuan() {
-        try {
-            String rsatuan = cksatuan.getSelectedItem().toString().substring(0, 6);
-            System.out.println(rsatuan);
-            String sql = "SELECT * FROM satuan WHERE kodesatuan LIKE '" + rsatuan + "' ORDER BY kodesatuan ASC";
-            PreparedStatement pst = connection.prepareStatement(sql);
-            ResultSet resultSet = pst.executeQuery(sql);
-            resultSet.absolute(1);
-            rsatuan = resultSet.getString("kodesatuan");
-            satuan = rsatuan;
-        } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e);
         }
     }
@@ -351,7 +306,6 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
         panelTombol = new javax.swing.JPanel();
         bsimpan = new javax.swing.JButton();
         bhapus = new javax.swing.JButton();
-        bedit = new javax.swing.JButton();
         panelCari = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -576,15 +530,6 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
         });
         panelTombol.add(bhapus);
 
-        bedit.setText("EDIT");
-        bedit.setPreferredSize(new java.awt.Dimension(50, 24));
-        bedit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                beditActionPerformed(evt);
-            }
-        });
-        panelTombol.add(bedit);
-
         panelCari.setBackground(new java.awt.Color(0, 0, 0));
         panelCari.setLayout(new java.awt.GridLayout(1, 0));
 
@@ -660,6 +605,7 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bsimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bsimpanActionPerformed
+        kodeStock();
         if (textjumlah.getText().equals("")
                 || texthbeli.getText().equals("")
                 || texttotal.getText().equals("")) {
@@ -677,45 +623,68 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
             try {
                 long millis = System.currentTimeMillis();
                 java.sql.Date date = new java.sql.Date(millis);
-                System.out.println(date);
                 String ttanggal = date.toString();
-                String sql = "INSERT INTO belibarang VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                PreparedStatement pst;
-                pst = connection.prepareStatement(sql);
-                pst.setString(1, tkodebeli);
-                pst.setString(2, tkodestock);
-                pst.setString(3, tsupplier);
-                pst.setString(4, tkategori);
-                pst.setString(5, tkodebarang);
-                pst.setString(6, tsatuan);
-                pst.setString(7, tjumlah);
-                pst.setString(8, thargabeli);
-                pst.setString(9, ttotal);
-                pst.setString(10, ttanggal);
-                pst.executeUpdate();
-                pst.close();
+                String sqlInsetBeliBarang = "INSERT INTO belibarang VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                PreparedStatement preparedStatement;
+                preparedStatement = connection.prepareStatement(sqlInsetBeliBarang);
+                preparedStatement.setString(1, tkodebeli);
+                preparedStatement.setString(2, tkodestock);
+                preparedStatement.setString(3, tsupplier);
+                preparedStatement.setString(4, tkategori);
+                preparedStatement.setString(5, tkodebarang);
+                preparedStatement.setString(6, tsatuan);
+                preparedStatement.setString(7, tjumlah);
+                preparedStatement.setString(8, thargabeli);
+                preparedStatement.setString(9, ttotal);
+                preparedStatement.setString(10, ttanggal);
+                preparedStatement.executeUpdate();
+                preparedStatement.close();
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, e);
+                JOptionPane.showMessageDialog(null, "Data gagal disimpan pada tabel beli barang " + e);
             }
 
             try {
-                Connection c = Koneksi.getKoneksi();
-                String sql = "INSERT INTO stock VALUES (?, ?, ?, ?, ?, ?, ?)";
-                PreparedStatement pst;
-                pst = c.prepareStatement(sql);
-                pst.setString(1, tkodestock);
-                pst.setString(2, tkategori);
-                pst.setString(3, tkodebarang);
-                pst.setString(4, tsatuan);
-                pst.setString(5, tjumlah);
-                pst.setString(6, thargabeli);
-                pst.setString(7, ttotal);
-                pst.executeUpdate();
-                pst.close();
-                JOptionPane.showMessageDialog(null, "DATA BERHASIL DISIMPAN", "PT MULIA JAYA TEXTILE", JOptionPane.INFORMATION_MESSAGE);
+                String sqlKodeStock = "SELECT kodestock, kodekategori, kodesatuan, kodebarang, SUM(jumlahbarang) FROM belibarang GROUP by kodestock, kodekategori, kodesatuan, kodebarang";
+                Statement statementKodeStock = connection.createStatement();
+                ResultSet resultSetKodeStock = statementKodeStock.executeQuery(sqlKodeStock);
+
+                while (resultSetKodeStock.next()) {
+                    String kodeStock = resultSetKodeStock.getString("kodestock");
+                    String kodeKategori = resultSetKodeStock.getString("kodekategori");
+                    String kodeSatuan = resultSetKodeStock.getString("kodesatuan");
+                    String kodeBarang = resultSetKodeStock.getString("kodebarang");
+                    String jumlahBarang = resultSetKodeStock.getString("SUM(jumlahbarang)");
+                    PreparedStatement preparedStatement;
+                    System.out.println(kodeStock + " " + kodeKategori + " " + kodeSatuan + " " + kodeBarang + " " + jumlahBarang);
+                    System.out.println(stock);
+
+                    String sqlKodeStockExist = "SELECT kodestock FROM stock WHERE kodestock = '" + kodeStock + "'";
+                    Statement statementKodeStockExist = connection.createStatement();
+                    ResultSet resultKodeStockExist = statementKodeStockExist.executeQuery(sqlKodeStockExist);
+                    if (resultKodeStockExist.next() == false) {
+                        preparedStatement = connection.prepareStatement(
+                                "INSERT INTO stock VALUES ("
+                                + "'" + stock + "', "
+                                + "'" + kodeKategori + "', "
+                                + "'" + kodeSatuan + "', "
+                                + "'" + kodeBarang + "', "
+                                + "'" + jumlahBarang + "')");
+                        preparedStatement.executeUpdate();
+                    } else {
+                        preparedStatement = connection.prepareStatement(
+                                "UPDATE stock SET "
+                                + "kodekategori = '" + kodeKategori + "', "
+                                + "kodesatuan = '" + kodeSatuan + "', "
+                                + "kodebarang = '" + kodeBarang + "', "
+                                + "jumlahbarang = '" + jumlahBarang + "' "
+                                + "WHERE kodestock = '" + kodeStock + "'"
+                        );
+                        preparedStatement.executeUpdate();
+                    }
+                }
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, e);
-            } 
+                JOptionPane.showMessageDialog(null, "Data gagal disimpan pada tabel beli barang " + e);
+            }
             loadData();
             kodeBeli();
             kosong();
@@ -723,8 +692,12 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_bsimpanActionPerformed
     private void tableinputMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableinputMouseClicked
         bsimpan.setEnabled(false);
-        bedit.setEnabled(true);
+//        bedit.setEnabled(true);
         bhapus.setEnabled(true);
+//        ckbarang.setEnabled(false);
+//        ckkategori.setEnabled(false);
+//        cksatuan.setEnabled(false);
+//        cksupplier.setEnabled(false);
 
         int i = tableinput.getSelectedRow();
         if (i == -1) {
@@ -736,7 +709,7 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
 
         String tablekodestock = (String) defaultTableModel.getValueAt(i, 1);
         stock = tablekodestock;
-        
+
         String tablesupplier = (String) defaultTableModel.getValueAt(i, 2);
         cksupplier.setSelectedItem(tablesupplier);
 
@@ -751,73 +724,60 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
 
     }//GEN-LAST:event_tableinputMouseClicked
     private void bhapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bhapusActionPerformed
+        kodeStock();
         try {
             String sql = "DELETE FROM belibarang WHERE kodebeli='" + textkbeli.getText() + "'";
-            PreparedStatement pst = connection.prepareStatement(sql);
-            pst.execute();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.execute();
         } catch (HeadlessException | SQLException e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
         try {
-            String sql = "DELETE FROM stock WHERE kodestock='" + stock + "'";
-            connection = (Connection) Koneksi.getKoneksi();
-            PreparedStatement pst = connection.prepareStatement(sql);
-            pst.execute();
-            JOptionPane.showMessageDialog(null, "DATA BERHASIL DIHAPUS", "PT MULIA JAYA TEXTILE", JOptionPane.INFORMATION_MESSAGE);
-        } catch (HeadlessException | SQLException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
-        }
+                String sqlKodeStock = "SELECT kodestock, kodekategori, kodesatuan, kodebarang, SUM(jumlahbarang) FROM belibarang GROUP by kodestock, kodekategori, kodesatuan, kodebarang";
+                Statement statementKodeStock = connection.createStatement();
+                ResultSet resultSetKodeStock = statementKodeStock.executeQuery(sqlKodeStock);
+
+                while (resultSetKodeStock.next()) {
+                    String kodeStock = resultSetKodeStock.getString("kodestock");
+                    String kodeKategori = resultSetKodeStock.getString("kodekategori");
+                    String kodeSatuan = resultSetKodeStock.getString("kodesatuan");
+                    String kodeBarang = resultSetKodeStock.getString("kodebarang");
+                    String jumlahBarang = resultSetKodeStock.getString("SUM(jumlahbarang)");
+                    PreparedStatement preparedStatement;
+                    System.out.println(kodeStock + " " + kodeKategori + " " + kodeSatuan + " " + kodeBarang + " " + jumlahBarang);
+                    System.out.println(stock);
+
+                    String sqlKodeStockExist = "SELECT kodestock FROM stock WHERE kodestock = '" + kodeStock + "'";
+                    Statement statementKodeStockExist = connection.createStatement();
+                    ResultSet resultKodeStockExist = statementKodeStockExist.executeQuery(sqlKodeStockExist);
+                    if (resultKodeStockExist.next() == false) {
+                        preparedStatement = connection.prepareStatement(
+                                "INSERT INTO stock VALUES ("
+                                + "'" + stock + "', "
+                                + "'" + kodeKategori + "', "
+                                + "'" + kodeSatuan + "', "
+                                + "'" + kodeBarang + "', "
+                                + "'" + jumlahBarang + "')");
+                        preparedStatement.executeUpdate();
+                    } else {
+                        preparedStatement = connection.prepareStatement(
+                                "UPDATE stock SET "
+                                + "kodekategori = '" + kodeKategori + "', "
+                                + "kodesatuan = '" + kodeSatuan + "', "
+                                + "kodebarang = '" + kodeBarang + "', "
+                                + "jumlahbarang = '" + jumlahBarang + "' "
+                                + "WHERE kodestock = '" + kodeStock + "'"
+                        );
+                        preparedStatement.executeUpdate();
+                    }
+                }
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "Data gagal disimpan pada tabel beli barang " + e);
+            }
         loadData();
         kodeBeli();
         kosong();
     }//GEN-LAST:event_bhapusActionPerformed
-
-    private void beditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_beditActionPerformed
-        if (textjumlah.getText().equals("")
-                || texthbeli.getText().equals("")
-                || texttotal.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "LENGKAPI DATA !", "PT MULIA JAYA TEXTILE", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            try {
-                connection = Koneksi.getKoneksi();
-                String sql = "UPDATE belibarang SET kodestock=?, kodesupplier=?, kodekategori=?, kodebarang=?, kodesatuan=?, jumlahbarang=?, hargabeli=?, total=? where kodebeli='" + textkbeli.getText() + "'";
-                PreparedStatement pst;
-                pst = connection.prepareStatement(sql);
-                pst.setString(1, stock);
-                pst.setString(2, cksupplier.getSelectedItem().toString().substring(0, 6));
-                pst.setString(3, ckkategori.getSelectedItem().toString().substring(0, 6));
-                pst.setString(4, ckbarang.getSelectedItem().toString().substring(0, 6));
-                pst.setString(5, cksatuan.getSelectedItem().toString().substring(0, 6));
-                pst.setString(6, textjumlah.getText());
-                pst.setString(7, texthbeli.getText());
-                pst.setString(8, texttotal.getText());
-                pst.executeUpdate();
-                textkbeli.requestFocus();
-            } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, "Data Gagal Diubah" + e);
-            }
-            try {
-                connection = Koneksi.getKoneksi();
-                String sql = "UPDATE stock SET kodekategori=?, kodebarang=?, kodesatuan=?, jumlahbarang=?, hargabeli=?, total=? WHERE kodestock='" + stock + "'";
-                PreparedStatement pst;
-                pst = connection.prepareStatement(sql);
-                pst.setString(1, ckkategori.getSelectedItem().toString().substring(0, 6));
-                pst.setString(2, ckbarang.getSelectedItem().toString().substring(0, 6));
-                pst.setString(3, cksatuan.getSelectedItem().toString().substring(0, 6));
-                pst.setString(4, textjumlah.getText());
-                pst.setString(5, texthbeli.getText());
-                pst.setString(6, texttotal.getText());
-                pst.executeUpdate();
-                JOptionPane.showMessageDialog(null, "DATA BERHASIL DIRUBAH", "PT MULIA JAYA TEXTILE", JOptionPane.INFORMATION_MESSAGE);
-                textkbeli.requestFocus();
-            } catch (SQLException e) {
-                JOptionPane.showMessageDialog(this, e.getMessage());
-            } 
-            loadData();
-            kodeBeli();
-            kosong();
-        }
-    }//GEN-LAST:event_beditActionPerformed
 
     private void textcariKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textcariKeyReleased
         defaultTableModel.getDataVector().removeAllElements();
@@ -825,35 +785,33 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
 
         try {
             connection = Koneksi.getKoneksi();
-            try (Statement st = connection.createStatement()) {
-                String sql = "SELECT * FROM belibarang WHERE "
-                        + "kodebeli LIKE '%" + textcari.getText()
-                        + "%' OR kodestock LIKE'%" + textcari.getText()
-                        + "%' OR namasupplier LIKE'%" + textcari.getText()
-                        + "%' OR namakategori LIKE'%" + textcari.getText()
-                        + "%' OR namabarang LIKE'" + textcari.getText()
-                        + "%' OR namasatuan LIKE'%" + textcari.getText()
-                        + "%' OR jumlah LIKE'%" + textcari.getText()
-                        + "%' OR hargabeli LIKE'%" + textcari.getText()
-                        + "%' OR total LIKE'%" + textcari.getText()
-                        + "%' OR tanggal LIKE'%" + textcari.getText() + "%'";
-                try (ResultSet rstest = st.executeQuery(sql)) {
-                    while (rstest.next()) {
-                        Object[] objects = new Object[10];
-                        objects[0] = rstest.getString("kodebeli");
-                        objects[1] = rstest.getString("kodestock");
-                        objects[2] = rstest.getString("namasupplier");
-                        objects[3] = rstest.getString("namakategori");
-                        objects[4] = rstest.getString("namabarang");
-                        objects[5] = rstest.getString("namasatuan");
-                        objects[6] = rstest.getString("jumlahbarang");
-                        objects[7] = rstest.getString("hargabeli");
-                        objects[8] = rstest.getString("total");
-                        objects[9] = rstest.getString("tanggal");
+            Statement statement = connection.createStatement();
+            String sql = "SELECT * FROM belibarang WHERE "
+                    + "kodebeli LIKE '%" + textcari.getText()
+                    + "%' OR kodestock LIKE'%" + textcari.getText()
+                    + "%' OR kodesupplier LIKE'%" + textcari.getText()
+                    + "%' OR kodekategori LIKE'%" + textcari.getText()
+                    + "%' OR kodebarang LIKE'" + textcari.getText()
+                    + "%' OR kodesatuan LIKE'%" + textcari.getText()
+                    + "%' OR jumlah LIKE'%" + textcari.getText()
+                    + "%' OR hargabeli LIKE'%" + textcari.getText()
+                    + "%' OR total LIKE'%" + textcari.getText()
+                    + "%' OR tanggal LIKE'%" + textcari.getText() + "%'";
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                Object[] objects = new Object[10];
+                objects[0] = resultSet.getString("kodebeli");
+                objects[1] = resultSet.getString("kodestock");
+                objects[2] = resultSet.getString("kodesupplier");
+                objects[3] = resultSet.getString("kodekategori");
+                objects[4] = resultSet.getString("kodebarang");
+                objects[5] = resultSet.getString("kodesatuan");
+                objects[6] = resultSet.getString("jumlahbarang");
+                objects[7] = resultSet.getString("hargabeli");
+                objects[8] = resultSet.getString("total");
+                objects[9] = resultSet.getString("tanggal");
 
-                        defaultTableModel.addRow(objects);
-                    }
-                }
+                defaultTableModel.addRow(objects);
             }
         } catch (SQLException e) {
             System.out.println("Terjadi Error");
@@ -868,7 +826,7 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_cksatuanActionPerformed
 
     private void cksatuanItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cksatuanItemStateChanged
-        tampilKodeSatuan();
+//        tampilKodeSatuan();
         kodeBeli();
     }//GEN-LAST:event_cksatuanItemStateChanged
 
@@ -888,7 +846,7 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void ckkategoriItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_ckkategoriItemStateChanged
-        tampilKodeKategori();
+//        tampilKodeKategori();
         kodeBeli();
     }//GEN-LAST:event_ckkategoriItemStateChanged
 
@@ -897,12 +855,12 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_ckkategoriActionPerformed
 
     private void ckbarangItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_ckbarangItemStateChanged
-        tampilKodeBarang();
+//        tampilKodeBarang();
         kodeBeli();
     }//GEN-LAST:event_ckbarangItemStateChanged
 
     private void cksupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cksupplierActionPerformed
-        tampilKodeSupplier();
+//        tampilKodeSupplier();
         kodeBeli();
     }//GEN-LAST:event_cksupplierActionPerformed
 
@@ -928,7 +886,6 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton bedit;
     private javax.swing.JButton bhapus;
     private javax.swing.JButton bsimpan;
     private javax.swing.JComboBox<String> ckbarang;
@@ -972,5 +929,75 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
     private javax.swing.JTextField textkbeli;
     private javax.swing.JTextField texttotal;
     // End of variables declaration//GEN-END:variables
-
+//kodeStock();
+//        if (textjumlah.getText().equals("")
+//                || texthbeli.getText().equals("")
+//                || texttotal.getText().equals("")) {
+//            JOptionPane.showMessageDialog(null, "LENGKAPI DATA !", "PT MULIA JAYA TEXTILE", JOptionPane.INFORMATION_MESSAGE);
+//        } else {
+//            try {
+//                connection = Koneksi.getKoneksi();
+//                String sql = "UPDATE belibarang SET kodestock=?, kodesupplier=?, kodekategori=?, kodebarang=?, kodesatuan=?, jumlahbarang=?, hargabeli=?, total=? where kodebeli='" + textkbeli.getText() + "'";
+//                PreparedStatement preparedStatement;
+//                preparedStatement = connection.prepareStatement(sql);
+//                preparedStatement.setString(1, stock);
+//                preparedStatement.setString(2, cksupplier.getSelectedItem().toString().substring(0, 6));
+//                preparedStatement.setString(3, ckkategori.getSelectedItem().toString().substring(0, 6));
+//                preparedStatement.setString(4, ckbarang.getSelectedItem().toString().substring(0, 6));
+//                preparedStatement.setString(5, cksatuan.getSelectedItem().toString().substring(0, 6));
+//                preparedStatement.setString(6, textjumlah.getText());
+//                preparedStatement.setString(7, texthbeli.getText());
+//                preparedStatement.setString(8, texttotal.getText());
+//                preparedStatement.executeUpdate();
+//                textkbeli.requestFocus();
+//            } catch (SQLException e) {
+//                JOptionPane.showMessageDialog(null, "Data Gagal Diubah" + e);
+//            }
+//
+//            try {
+//                String sqlKodeStock = "SELECT kodestock, kodekategori, kodesatuan, kodebarang, SUM(jumlahbarang) FROM belibarang GROUP by kodestock, kodekategori, kodesatuan, kodebarang";
+//                Statement statementKodeStock = connection.createStatement();
+//                ResultSet resultSetKodeStock = statementKodeStock.executeQuery(sqlKodeStock);
+//
+//                while (resultSetKodeStock.next()) {
+//                    String kodeStock = resultSetKodeStock.getString("kodestock");
+//                    String kodeKategori = resultSetKodeStock.getString("kodekategori");
+//                    String kodeSatuan = resultSetKodeStock.getString("kodesatuan");
+//                    String kodeBarang = resultSetKodeStock.getString("kodebarang");
+//                    String jumlahBarang = resultSetKodeStock.getString("SUM(jumlahbarang)");
+//                    PreparedStatement preparedStatement;
+//                    System.out.println(kodeStock + " " + kodeKategori + " " + kodeSatuan + " " + kodeBarang + " " + jumlahBarang);
+//                    System.out.println(stock);
+//
+//                    String sqlKodeStockExist = "SELECT kodestock FROM stock WHERE kodestock = '" + kodeStock + "'";
+//                    Statement statementKodeStockExist = connection.createStatement();
+//                    ResultSet resultKodeStockExist = statementKodeStockExist.executeQuery(sqlKodeStockExist);
+//                    if (resultKodeStockExist.next() == false) {
+//                        preparedStatement = connection.prepareStatement(
+//                                "INSERT INTO stock VALUES ("
+//                                + "'" + stock + "', "
+//                                + "'" + kodeKategori + "', "
+//                                + "'" + kodeSatuan + "', "
+//                                + "'" + kodeBarang + "', "
+//                                + "'" + jumlahBarang + "')");
+//                        preparedStatement.executeUpdate();
+//                    } else {
+//                        preparedStatement = connection.prepareStatement(
+//                                "UPDATE stock SET "
+//                                + "kodekategori = '" + kodeKategori + "', "
+//                                + "kodesatuan = '" + kodeSatuan + "', "
+//                                + "kodebarang = '" + kodeBarang + "', "
+//                                + "jumlahbarang = '" + jumlahBarang + "' "
+//                                + "WHERE kodestock = '" + kodeStock + "'"
+//                        );
+//                        preparedStatement.executeUpdate();
+//                    }
+//                }
+//            } catch (SQLException e) {
+//                JOptionPane.showMessageDialog(null, "Data gagal disimpan pada tabel beli barang " + e);
+//            }
+//            loadData();
+//            kodeBeli();
+//            kosong();
+//        }
 }

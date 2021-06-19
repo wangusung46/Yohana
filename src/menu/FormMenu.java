@@ -2,9 +2,6 @@ package menu;
 
 import barang.*;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import kategori.*;
 import pelanggan.*;
 import satuan.*;

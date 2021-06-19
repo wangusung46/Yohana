@@ -65,18 +65,18 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
             String sql = "SELECT * FROM jualbarang";
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
-            
+
             Statement statementRelation = connection.createStatement();
             ResultSet resultSetRelation;
-            
+
             while (resultSet.next()) {
                 Object[] objects = new Object[10];
                 objects[0] = resultSet.getString("faktur");
-                
+
                 resultSetRelation = statementRelation.executeQuery("SELECT namapelanggan FROM pelanggan WHERE kodepelanggan = '" + resultSet.getString("kodepelanggan") + "'");
                 resultSetRelation.next();
                 objects[1] = resultSetRelation.getString("namapelanggan");
-                
+
                 resultSetRelation = statementRelation.executeQuery("SELECT namabarang FROM barang WHERE kodebarang = '" + resultSet.getString("kodebarang") + "'");
                 resultSetRelation.next();
                 objects[2] = resultSetRelation.getString("namabarang");
@@ -84,7 +84,7 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
                 resultSetRelation = statementRelation.executeQuery("SELECT namasatuan FROM satuan WHERE kodesatuan = '" + resultSet.getString("kodesatuan") + "'");
                 resultSetRelation.next();
                 objects[3] = resultSetRelation.getString("namasatuan");
-                
+
                 objects[4] = resultSet.getString("hargajual");
                 objects[5] = resultSet.getString("jumlahjual");
                 objects[6] = resultSet.getString("hargajualtotal");
@@ -260,8 +260,6 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
         textkembali = new javax.swing.JTextField();
         panelTombol = new javax.swing.JPanel();
         bsimpan = new javax.swing.JButton();
-        bhapus = new javax.swing.JButton();
-        bedit = new javax.swing.JButton();
         panelCetak = new javax.swing.JPanel();
         ccetak = new javax.swing.JComboBox<>();
         bcetak = new javax.swing.JButton();
@@ -469,24 +467,6 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
         });
         panelTombol.add(bsimpan);
 
-        bhapus.setText("HAPUS");
-        bhapus.setPreferredSize(new java.awt.Dimension(50, 24));
-        bhapus.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bhapusActionPerformed(evt);
-            }
-        });
-        panelTombol.add(bhapus);
-
-        bedit.setText("EDIT");
-        bedit.setPreferredSize(new java.awt.Dimension(50, 24));
-        bedit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                beditActionPerformed(evt);
-            }
-        });
-        panelTombol.add(bedit);
-
         panelCetak.setLayout(new java.awt.GridLayout(1, 0));
 
         panelCetak.add(ccetak);
@@ -585,54 +565,6 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void bsimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bsimpanActionPerformed
-        if (texthjual.getText().equals("")
-                || textjjual.getText().equals("")
-                || textbayar.getText().equals("")
-                || texttbarang.getText().equals("")
-                || textbayar.getText().equals("")
-                || textuntung.getText().equals("")
-                || textkembali.getText().equals("")
-                ){
-            JOptionPane.showMessageDialog(null, "LENGKAPI DATA !", "PT MULIA JAYA TEXTILE", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            String tfaktur = textfaktur.getText();
-            String tkpelanggan = cnpelanggan.getSelectedItem().toString().substring(0, 6);
-            String tkbarang = cnbarang.getSelectedItem().toString().substring(0, 6);
-            String tksatuan = textnsatuan.getText().substring(0, 6);
-            String thjual = texthjual.getText();
-            String tjjual = textjjual.getText();
-            String thjtotal = texttbarang.getText();
-            String tbayar = textbayar.getText();
-            String tkembali = textkembali.getText();
-            String tuntung = textuntung.getText();
-            long millis = System.currentTimeMillis();
-            java.sql.Date date = new java.sql.Date(millis);
-            System.out.println(date);
-            String ttanggal = date.toString();
-            String sql = "INSERT INTO jualbarang VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            try (PreparedStatement pst = connection.prepareStatement(sql)) {
-                pst.setString(1, tfaktur);
-                pst.setString(2, tkpelanggan);
-                pst.setString(3, tkbarang);
-                pst.setString(4, tksatuan);
-                pst.setString(5, thjual);
-                pst.setString(6, tjjual);
-                pst.setString(7, thjtotal);
-                pst.setString(8, tbayar);
-                pst.setString(9, tkembali);
-                pst.setString(10, tuntung);
-                pst.setString(11, ttanggal);
-                pst.executeUpdate();
-                JOptionPane.showMessageDialog(null, "DATA BERHASIL DISIMPAN", "PT MULIA JAYA TEXTILE", JOptionPane.INFORMATION_MESSAGE);
-            } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, e);
-            }
-            kosong();
-            loadData();
-        }
-    }//GEN-LAST:event_bsimpanActionPerformed
 
     private void textcariKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textcariKeyReleased
         try {
@@ -746,8 +678,6 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
 
     private void tableinputMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableinputMouseClicked
         bsimpan.setEnabled(false);
-        bedit.setEnabled(true);
-        bhapus.setEnabled(true);
 
         int i = tableinput.getSelectedRow();
         if (i == -1) {
@@ -768,19 +698,81 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
 
         String tableHargaJual = (String) defaultTableModel.getValueAt(i, 4);
         texthjual.setText(tableHargaJual);
-        
+
         String tableJumlahJual = (String) defaultTableModel.getValueAt(i, 5);
         textjjual.setText(tableJumlahJual);
-        
+
     }//GEN-LAST:event_tableinputMouseClicked
 
-    private void bhapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bhapusActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_bhapusActionPerformed
+    private void bsimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bsimpanActionPerformed
+        if (texthjual.getText().equals("")
+                || textjjual.getText().equals("")
+                || textbayar.getText().equals("")
+                || texttbarang.getText().equals("")
+                || textbayar.getText().equals("")
+                || textuntung.getText().equals("")
+                || textkembali.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "LENGKAPI DATA !", "PT MULIA JAYA TEXTILE", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            String tfaktur = textfaktur.getText();
+            String tkpelanggan = cnpelanggan.getSelectedItem().toString().substring(0, 6);
+            String tkbarang = cnbarang.getSelectedItem().toString().substring(0, 6);
+            String tksatuan = textnsatuan.getText().substring(0, 6);
+            String thjual = texthjual.getText();
+            String tjjual = textjjual.getText();
+            String thjtotal = texttbarang.getText();
+            String tbayar = textbayar.getText();
+            String tkembali = textkembali.getText();
+            String tuntung = textuntung.getText();
+            long millis = System.currentTimeMillis();
+            java.sql.Date date = new java.sql.Date(millis);
+            System.out.println(date);
+            String ttanggal = date.toString();
+            String sql = "INSERT INTO jualbarang VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            try {
+                PreparedStatement pst = connection.prepareStatement(sql);
+                pst.setString(1, tfaktur);
+                pst.setString(2, tkpelanggan);
+                pst.setString(3, tkbarang);
+                pst.setString(4, tksatuan);
+                pst.setString(5, thjual);
+                pst.setString(6, tjjual);
+                pst.setString(7, thjtotal);
+                pst.setString(8, tbayar);
+                pst.setString(9, tkembali);
+                pst.setString(10, tuntung);
+                pst.setString(11, ttanggal);
+                pst.executeUpdate();
+                JOptionPane.showMessageDialog(null, "DATA BERHASIL DISIMPAN", "PT MULIA JAYA TEXTILE", JOptionPane.INFORMATION_MESSAGE);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
 
-    private void beditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_beditActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_beditActionPerformed
+            try {
+                String sqlSelectStock = "SELECT kodestock, jumlahbarang FROM stock WHERE kodebarang = '" + tkbarang + "'";
+                String jumlahBarang = "";
+                String kodeStock = "";
+                PreparedStatement preparedStatementSelectStock = connection.prepareStatement(sqlSelectStock);
+//              Statement statementKodeStockExist = connection.createStatement();
+                    ResultSet resultSetSelectStock = preparedStatementSelectStock.executeQuery(sqlSelectStock);
+                while (resultSetSelectStock.next()) {
+                    jumlahBarang = resultSetSelectStock.getString("jumlahbarang");
+                    kodeStock = resultSetSelectStock.getString("kodestock");
+                }
+                int hasil = Integer.parseInt(jumlahBarang) - Integer.parseInt(tjjual);
+                String sqlStock = "UPDATE stock SET "
+                        + "jumlahbarang = '" + hasil + "' "
+                        + "WHERE kodestock = '" + kodeStock + "'";
+                PreparedStatement preparedStatementStock = connection.prepareStatement(sqlStock);
+                preparedStatementStock.executeUpdate();
+                JOptionPane.showMessageDialog(null, "STOCK BERHASIL DISIMPAN", "PT MULIA JAYA TEXTILE", JOptionPane.INFORMATION_MESSAGE);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
+            kosong();
+            loadData();
+        }
+    }//GEN-LAST:event_bsimpanActionPerformed
     public static void main(String args[]) {
 
         java.awt.EventQueue.invokeLater(() -> {
@@ -790,8 +782,6 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bcetak;
-    private javax.swing.JButton bedit;
-    private javax.swing.JButton bhapus;
     private javax.swing.JButton bsimpan;
     private javax.swing.JButton btotal;
     private javax.swing.JComboBox<String> ccetak;
