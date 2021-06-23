@@ -44,16 +44,19 @@ public class FormStockBarang extends javax.swing.JInternalFrame {
                 resultSetRelation = statementRelation.executeQuery("SELECT namakategori FROM kategori WHERE kodekategori = '" + resultSet.getString("kodekategori") + "'");
                 resultSetRelation.next();
                 objects[1] = resultSetRelation.getString("namakategori");
-
+                System.out.println(objects[1]);
                 resultSetRelation = statementRelation.executeQuery("SELECT namabarang FROM barang WHERE kodebarang = '" + resultSet.getString("kodebarang") + "'");
+                System.out.println("SELECT namabarang FROM barang WHERE kodebarang = '" + resultSet.getString("kodebarang"));
+                System.out.println("SELECT namabarang FROM barang WHERE kodebarang = '" + resultSet.getString("kodebarang"));
+                System.out.println("SELECT namabarang FROM barang WHERE kodebarang = '" + resultSet.getString("kodebarang"));
                 resultSetRelation.next();
                 objects[2] = resultSetRelation.getString("namabarang");
-
+                System.out.println(objects[2]);
                 resultSetRelation = statementRelation.executeQuery("SELECT namasatuan FROM satuan WHERE kodesatuan = '" + resultSet.getString("kodesatuan") + "'");
                 resultSetRelation.next();
                 objects[3] = resultSetRelation.getString("namasatuan");
                 objects[4] = resultSet.getString("jumlahbarang");
-
+                
                 defaultTableModel.addRow(objects);
             }
             resultSet.close();
