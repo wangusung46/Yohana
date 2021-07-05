@@ -115,7 +115,7 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
             }
 
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Data Gagal Disimpan" + e);
+            JOptionPane.showMessageDialog(null, "Data Gagal Di Load" + e);
         }
     }
 
@@ -283,6 +283,7 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
     private void kosong() {
         textjumlah.setText("");
         texthbeli.setText("");
+        texttotal.setText("");
     }
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -622,99 +623,95 @@ public class FormBarangMasuk extends javax.swing.JInternalFrame {
 
     private void bsimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bsimpanActionPerformed
         kodeStock();
-        String sql = "SELECT kodebarang, kodekategori, kodesatuan FROM belibarang WHERE kodebarang = '" + ckbarang.getSelectedItem().toString().substring(0, 6) + "' GROUP BY kodebarang";
+        String tkodebeli = textkbeli.getText();
+        String tkodestock = stock;
+        String tsupplier = cksupplier.getSelectedItem().toString().substring(0, 6);
+        String tkategori = ckkategori.getSelectedItem().toString().substring(0, 6);
+        String tkodebarang = ckbarang.getSelectedItem().toString().substring(0, 6);
+        String tsatuan = cksatuan.getSelectedItem().toString().substring(0, 6);
+        String tjumlah = textjumlah.getText();
+        String thargabeli = texthbeli.getText();
+        String ttotal = texttotal.getText();
+
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            ResultSet resultSet = preparedStatement.executeQuery(sql);
-            resultSet.next();
-            if (!resultSet.getString("kodekategori").equals(ckkategori.getSelectedItem().toString().subSequence(0, 6)) || !resultSet.getString("kodesatuan").equals(cksatuan.getSelectedItem().toString().subSequence(0, 6))) {
-                JOptionPane.showMessageDialog(null, "Data barang dengan kode barang " + ckbarang.getSelectedItem().toString().substring(0, 6) + " mempunyai satuan yang berbeda", "PT MULIA JAYA TEXTILE", JOptionPane.INFORMATION_MESSAGE);
-            } else if (textjumlah.getText().equals("")
+//            String sql = "SELECT kodebarang, kodekategori, kodesatuan FROM belibarang WHERE kodebarang = '" + ckbarang.getSelectedItem().toString().substring(0, 6) + "' GROUP BY kodebarang";
+//            System.out.println(sql);
+//            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+//            if (preparedStatement.executeQuery().first()) {
+//                ResultSet resultSet = preparedStatement.executeQuery(sql);
+//                resultSet.next();
+//                if (!resultSet.getString("kodekategori").equals(tkategori) || !resultSet.getString("kodesatuan").equals(tsatuan)) {
+//                    JOptionPane.showMessageDialog(null, "Data barang dengan kode barang " + ckbarang.getSelectedItem().toString().substring(0, 6) + " mempunyai satuan yang berbeda", "PT MULIA JAYA TEXTILE", JOptionPane.INFORMATION_MESSAGE);
+//                }
+//            }
+            
+            if (textjumlah.getText().equals("")
                     || texthbeli.getText().equals("")
                     || texttotal.getText().equals("")) {
                 JOptionPane.showMessageDialog(null, "LENGKAPI DATA !", "PT MULIA JAYA TEXTILE", JOptionPane.INFORMATION_MESSAGE);
             } else {
-                String tkodebeli = textkbeli.getText();
-                String tkodestock = stock;
-                String tsupplier = cksupplier.getSelectedItem().toString().substring(0, 6);
-                String tkategori = ckkategori.getSelectedItem().toString().substring(0, 6);
-                String tkodebarang = ckbarang.getSelectedItem().toString().substring(0, 6);
-                String tsatuan = cksatuan.getSelectedItem().toString().substring(0, 6);
-                String tjumlah = textjumlah.getText();
-                String thargabeli = texthbeli.getText();
-                String ttotal = texttotal.getText();
-                try {
-                    long millis = System.currentTimeMillis();
-                    java.sql.Date date = new java.sql.Date(millis);
-                    String ttanggal = date.toString();
-                    String sqlInsetBeliBarang = "INSERT INTO belibarang VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-//                    PreparedStatement preparedStatement;
-                    preparedStatement = connection.prepareStatement(sqlInsetBeliBarang);
-                    preparedStatement.setString(1, tkodebeli);
-                    preparedStatement.setString(2, tkodestock);
-                    preparedStatement.setString(3, tsupplier);
-                    preparedStatement.setString(4, tkategori);
-                    preparedStatement.setString(5, tkodebarang);
-                    preparedStatement.setString(6, tsatuan);
-                    preparedStatement.setString(7, tjumlah);
-                    preparedStatement.setString(8, thargabeli);
-                    preparedStatement.setString(9, ttotal);
-                    preparedStatement.setString(10, ttanggal);
+                long millis = System.currentTimeMillis();
+                java.sql.Date date = new java.sql.Date(millis);
+                String ttanggal = date.toString();
+                String sqlInsetBeliBarang = "INSERT INTO belibarang VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                PreparedStatement preparedStatement = connection.prepareStatement(sqlInsetBeliBarang);
+                preparedStatement.setString(1, tkodebeli);
+                preparedStatement.setString(2, tkodestock);
+                preparedStatement.setString(3, tsupplier);
+                preparedStatement.setString(4, tkategori);
+                preparedStatement.setString(5, tkodebarang);
+                preparedStatement.setString(6, tsatuan);
+                preparedStatement.setString(7, tjumlah);
+                preparedStatement.setString(8, thargabeli);
+                preparedStatement.setString(9, ttotal);
+                preparedStatement.setString(10, ttanggal);
+                preparedStatement.executeUpdate();
+                preparedStatement.close();
+
+                String sql = "SELECT * "
+                        + "FROM stock a "
+                        + "LEFT JOIN belibarang b ON a.kodestock = b.kodestock "
+                        + "WHERE b.kodestock = '" + tkodestock + "' "
+                        + "AND b.kodekategori = '" + tkategori + "' "
+                        + "AND b.kodebarang = '" + tkodebarang + "' "
+                        + "AND b.kodesatuan = '" + tsatuan + "'";
+                System.out.println(sql);
+                preparedStatement = connection.prepareStatement(sql);
+                if (!preparedStatement.executeQuery(sql).first()) {
+                    preparedStatement = connection.prepareStatement(
+                            "INSERT INTO stock VALUES ("
+                            + "'" + stock + "', "
+                            + "'" + tkategori + "', "
+                            + "'" + tkodebarang + "', "
+                            + "'" + tsatuan + "', "
+                            + "'" + tjumlah + "')");
+                    System.out.println("INSERT INTO stock VALUES ("
+                            + "'" + stock + "', "
+                            + "'" + tkategori + "', "
+                            + "'" + tkodebarang + "', "
+                            + "'" + tsatuan + "', "
+                            + "'" + tjumlah + "')");
                     preparedStatement.executeUpdate();
-                    preparedStatement.close();
-                } catch (SQLException e) {
-                    JOptionPane.showMessageDialog(null, "Data gagal disimpan pada tabel beli barang " + e);
+                } else {
+                    preparedStatement = connection.prepareStatement(
+                            "UPDATE stock SET "
+                            + "jumlahbarang = jumlahbarang + '" + tjumlah + "' "
+                            + "WHERE kodestock = '" + stock + "'"
+                    );
+                    System.out.println("UPDATE stock SET "
+                            + "jumlahbarang = jumlahbarang + " + tjumlah + " "
+                            + "WHERE kodestock = '" + stock + "'");
+                    preparedStatement.executeUpdate();
                 }
-
-                try {
-                    String sqlKodeStock = "SELECT kodestock, kodekategori, kodesatuan, kodebarang, SUM(jumlahbarang) FROM belibarang GROUP by kodestock, kodekategori, kodesatuan, kodebarang";
-                    Statement statementKodeStock = connection.createStatement();
-                    ResultSet resultSetKodeStock = statementKodeStock.executeQuery(sqlKodeStock);
-
-                    while (resultSetKodeStock.next()) {
-                        String kodeStock = resultSetKodeStock.getString("kodestock");
-                        String kodeKategori = resultSetKodeStock.getString("kodekategori");
-                        String kodeSatuan = resultSetKodeStock.getString("kodesatuan");
-                        String kodeBarang = resultSetKodeStock.getString("kodebarang");
-                        String jumlahBarang = resultSetKodeStock.getString("SUM(jumlahbarang)");
-//                        PreparedStatement preparedStatement;
-                        System.out.println(kodeStock + " " + kodeKategori + " " + kodeSatuan + " " + kodeBarang + " " + jumlahBarang);
-                        System.out.println(stock);
-
-                        String sqlKodeStockExist = "SELECT kodestock FROM stock WHERE kodestock = '" + kodeStock + "'";
-                        Statement statementKodeStockExist = connection.createStatement();
-                        ResultSet resultKodeStockExist = statementKodeStockExist.executeQuery(sqlKodeStockExist);
-                        if (resultKodeStockExist.next() == false) {
-                            preparedStatement = connection.prepareStatement(
-                                    "INSERT INTO stock VALUES ("
-                                    + "'" + stock + "', "
-                                    + "'" + kodeKategori + "', "
-                                    + "'" + kodeBarang + "', "
-                                    + "'" + kodeSatuan + "', "
-                                    + "'" + jumlahBarang + "')");
-                            preparedStatement.executeUpdate();
-                        } else {
-                            preparedStatement = connection.prepareStatement(
-                                    "UPDATE stock SET "
-                                    + "kodekategori = '" + kodeKategori + "', "
-                                    + "kodesatuan = '" + kodeSatuan + "', "
-                                    + "kodebarang = '" + kodeBarang + "', "
-                                    + "jumlahbarang = '" + jumlahBarang + "' "
-                                    + "WHERE kodestock = '" + kodeStock + "'"
-                            );
-                            preparedStatement.executeUpdate();
-                        }
-                    }
-                } catch (SQLException e) {
-                    JOptionPane.showMessageDialog(null, "Data gagal disimpan pada tabel beli barang " + e);
-                }
-                loadData();
-                kodeBeli();
-                kosong();
             }
+
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Data Gagal Disimpan" + e);
+            JOptionPane.showMessageDialog(null, "Data gagal disimpan pada tabel beli barang " + e);
         }
+
+        loadData();
+        kodeBeli();
+        kosong();
 
     }//GEN-LAST:event_bsimpanActionPerformed
     private void tableinputMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableinputMouseClicked
