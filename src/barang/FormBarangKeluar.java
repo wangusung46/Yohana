@@ -771,6 +771,7 @@ public class FormBarangKeluar extends javax.swing.JInternalFrame {
             }
             kosong();
             loadData();
+            tampilCetak();
         }
     }//GEN-LAST:event_bsimpanActionPerformed
     public static void main(String args[]) {
