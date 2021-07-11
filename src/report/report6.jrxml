@@ -152,7 +152,7 @@ PT MULIA JAYA TEXTILE]]></text>
 	<columnFooter>
 		<band height="120" splitType="Stretch">
 			<staticText>
-				<reportElement x="353" y="100" width="200" height="20"/>
+				<reportElement x="353" y="80" width="200" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[Santoso]]></text>
 			</staticText>
@@ -166,6 +166,11 @@ PT MULIA JAYA TEXTILE]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA["Jakarta, " + new SimpleDateFormat("dd MMMM yyyy", new java.util.Locale("id")).format(new Date())]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="353" y="100" width="200" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[198507232005022001]]></text>
+			</staticText>
 		</band>
 	</columnFooter>
 	<pageFooter>
