@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="149"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="fakturdano" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
@@ -68,11 +68,6 @@ WHERE
 				</textElement>
 				<text><![CDATA[PT MULIA JAYA TEXTILE]]></text>
 			</staticText>
-			<textField pattern="EEEEE dd MMMMM yyyy">
-				<reportElement x="587" y="39" width="196" height="20"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[new SimpleDateFormat("EEEE, dd MMMM yyyy", new java.util.Locale("id")).format(new Date())]]></textFieldExpression>
-			</textField>
 			<image>
 				<reportElement x="36" y="4" width="164" height="75"/>
 				<imageExpression><![CDATA[new javax.swing.ImageIcon(getClass().getResource("/image/Mulia Jaya Textile.png")).getImage()]]></imageExpression>
@@ -84,6 +79,11 @@ WHERE
 				</textElement>
 				<text><![CDATA[Jalan Ciledug Raya Nomor 8 RT.08, RW. 5, Ulujami, Pesanggrahan, Jakarta.]]></text>
 			</staticText>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="602" y="59" width="200" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Jakarta, " + new SimpleDateFormat("EEEE, dd MMMM yyyy", new java.util.Locale("id")).format(new Date())]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>
